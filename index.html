@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="DaisyOS Ecosystem - SAYSO, DaisySpeed, DaisyGT, DaisyObjects, DaisyInvestigation. The most advanced racing, telemetry, social, and AR platform on the planet.">
+    <meta name="keywords" content="DaisyOS, SAYSO, DaisySpeed, DaisyGT, DaisyObjects, DaisyInvestigation, racing, telemetry, AR, NFT, blockchain, social">
+    <meta name="author" content="Douglas Owens Jr. - OwenSonicInfinity">
+    <meta name="theme-color" content="#0a0e27">
+    <title>DaisyOS Ecosystem | SAYSO — For the People</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Audiowide&family=Space+Mono:wght@400;700&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="css/daisyos.css">
+</head>
+<body>
+    <!-- ========== FLOATING CHROMATIC FLAGS CANVAS ========== -->
+    <canvas id="flagsCanvas" class="flags-canvas"></canvas>
+
+    <!-- ========== GLOBAL SETTINGS GEAR ========== -->
+    <button id="globalSettingsBtn" class="settings-gear-btn" aria-label="Settings" title="Settings">
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+    </button>
+
+    <!-- ========== HELP / SUGGESTIONS ICON ========== -->
+    <button id="globalHelpBtn" class="help-icon-btn" aria-label="Help & Suggestions" title="Help & Suggestions">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+    </button>
+
+    <!-- ========== GLOBAL SETTINGS PANEL (Hidden by default) ========== -->
+    <div id="globalSettingsPanel" class="settings-panel hidden">
+        <div class="settings-panel-header">
+            <h2>⚙️ Settings</h2>
+            <button id="closeSettingsBtn" class="close-btn">&times;</button>
+        </div>
+        <div class="settings-panel-body">
+            <!-- Theme Colors -->
+            <div class="settings-section">
+                <h3>🎨 Theme Color</h3>
+                <div class="color-presets">
+                    <button class="color-preset active" data-color="cyan" style="background:#00f0ff" title="Neon Cyan"></button>
+                    <button class="color-preset" data-color="magenta" style="background:#ff006e" title="Neon Magenta"></button>
+                    <button class="color-preset" data-color="lime" style="background:#39ff14" title="Neon Lime"></button>
+                    <button class="color-preset" data-color="purple" style="background:#b537f2" title="Neon Purple"></button>
+                    <button class="color-preset" data-color="orange" style="background:#ff6600" title="Neon Orange"></button>
+                    <button class="color-preset" data-color="pink" style="background:#ff10f0" title="Neon Pink"></button>
+                    <button class="color-preset" data-color="blue" style="background:#0088ff" title="Neon Blue"></button>
+                    <button class="color-preset" data-color="green" style="background:#00ff41" title="Neon Green"></button>
+                </div>
+                <label for="customColorInput">Custom Color:</label>
+                <input type="color" id="customColorInput" value="#00f0ff">
+            </div>
+            <!-- Theme Mode -->
+            <div class="settings-section">
+                <h3>🌗 Theme Mode</h3>
+                <select id="themeModeSelect">
+                    <option value="dark">Dark Mode</option>
+                    <option value="light">Light Mode</option>
+                    <option value="auto">Auto (Device)</option>
+                </select>
+            </div>
+            <!-- Font Size -->
+            <div class="settings-section">
+                <h3>🔤 Font Size</h3>
+                <input type="range" id="fontSizeSlider" min="12" max="24" value="16" step="1">
+                <span id="fontSizeValue">16px</span>
+            </div>
+            <!-- Accessibility -->
+            <div class="settings-section">
+                <h3>♿ Accessibility</h3>
+                <label><input type="checkbox" id="highContrastToggle"> High Contrast</label>
+                <label><input type="checkbox" id="largeTextToggle"> Large Text</label>
+                <label><input type="checkbox" id="colorBlindToggle"> Color Blind Mode</label>
+            </div>
+            <!-- DaisyAI Voice -->
+            <div class="settings-section">
+                <h3>🎙️ DaisyAI Voice</h3>
+                <label><input type="checkbox" id="daisyVoiceToggle" checked> Voice Responses</label>
+                <label><input type="checkbox" id="daisyAutonomousToggle"> Autonomous Mode (Always On)</label>
+                <label for="daisyWakeWord">Wake Word:</label>
+                <input type="text" id="daisyWakeWord" value="Daisy" placeholder="Wake word">
+            </div>
+            <!-- Account -->
+            <div class="settings-section">
+                <h3>👤 Account</h3>
+                <button id="googleLoginBtn" class="btn btn-google">
+                    <svg viewBox="0 0 24 24" width="18" height="18"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                    Sign in with Google
+                </button>
+                <div id="userProfilePreview" class="hidden">
+                    <img id="userAvatar" src="" alt="Avatar" class="avatar-preview">
+                    <span id="userNameDisplay"></span>
+                    <button id="logoutBtn" class="btn-small">Logout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== HELP / SUGGESTIONS PANEL (Hidden) ========== -->
+    <div id="globalHelpPanel" class="help-panel hidden">
+        <div class="help-panel-header">
+            <h2>💬 Help & Suggestions</h2>
+            <button id="closeHelpBtn" class="close-btn">&times;</button>
+        </div>
+        <div class="help-panel-body">
+            <textarea id="helpMessageInput" placeholder="Tell us what you need help with or suggest a feature..."></textarea>
+            <button id="submitHelpBtn" class="btn">Submit</button>
+            <div class="help-faq">
+                <h3>FAQ</h3>
+                <details><summary>How do I start a race?</summary><p>Open DaisyGT, select your vehicle, choose a race mode, and invite opponents or find open races.</p></details>
+                <details><summary>How do I sell NFTs?</summary><p>Go to the Marketplace from any app, mint your race/hunt data as an NFT, and list it for sale.</p></details>
+                <details><summary>Is DaisyAI always listening?</summary><p>Only if you enable Autonomous Mode in Settings. Otherwise, DaisyAI responds to the wake word.</p></details>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== MAIN APP SHELL ========== -->
+    <div id="appShell" class="app-shell">
+        <!-- Sidebar Navigation -->
+        <nav id="sidebarNav" class="sidebar-nav">
+            <div class="sidebar-brand">
+                <h1 class="brand-logo">DAISY<span class="accent">OS</span></h1>
+                <p class="brand-tagline">For the People</p>
+            </div>
+            <ul class="sidebar-menu">
+                <li><button class="nav-btn active" data-app="sayso">🏠 SAYSO Home</button></li>
+                <li><button class="nav-btn" data-app="daisyspeed">📡 DaisySpeed</button></li>
+                <li><button class="nav-btn" data-app="daisygt">🏁 DaisyGT</button></li>
+                <li><button class="nav-btn" data-app="daisyobjects">🔍 DaisyObjects</button></li>
+                <li><button class="nav-btn" data-app="daisyinvestigation">🕵️ DaisyInvestigation</button></li>
+                <li><hr class="nav-divider"></li>
+                <li><button class="nav-btn" data-app="marketplace">🛒 NFT Marketplace</button></li>
+                <li><button class="nav-btn" data-app="profile">👤 My Profile</button></li>
+                <li><button class="nav-btn" data-app="leaderboards">🏆 Leaderboards</button></li>
+            </ul>
+            <div class="sidebar-footer">
+                <p class="powered-by">Powered by DaisyOS</p>
+                <p class="driven-by">Driven by DaisyAI</p>
+                <p class="connected-to">⛓️ Connected to Blockchain</p>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main id="mainContent" class="main-content">
+            <!-- Content rendered dynamically by JS -->
+        </main>
+    </div>
+
+    <!-- ========== LEGAL FOOTER (Persistent) ========== -->
+    <footer id="globalFooter" class="global-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>DaisyOS Ecosystem</h4>
+                <p>© 2026 DAISYOS SAYSO OWENSONICINFINITY. All Rights Reserved.</p>
+                <p class="brand-tagline-footer">Legacy Systems That Outlive Cycles</p>
+            </div>
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="#" id="tosLink">Terms of Service</a></li>
+                    <li><a href="#" id="privacyLink">Privacy Policy</a></li>
+                    <li><a href="#" id="disclaimerLink">Disclaimer</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <p>📧 owensonicinfinity@gmail.com</p>
+                <p>📍 Cleveland, Ohio</p>
+                <p>👤 Douglas Owens Jr.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Links</h4>
+                <ul>
+                    <li><a href="https://owensonicinfinity.netlify.app" target="_blank">OwenSonicInfinity (Netlify)</a></li>
+                    <li><a href="https://owensonicinfinity.github.io" target="_blank">OwenSonicInfinity (GitHub Pages)</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Terms of Service | Privacy Policy | Disclaimer</p>
+            <p>Contact: owensonicinfinity@gmail.com | Links: Owensonicinfinity.netlify.app | Owensonicinfinity.github.io</p>
+        </div>
+    </footer>
+
+    <!-- ========== DISCLAIMER MODAL (First-time) ========== -->
+    <div id="disclaimerModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>⚠️ DISCLAIMER: OPERATE AT YOUR OWN RISK</h2>
+            <p>The DaisyOS Ecosystem and its integrated applications, including Daisy GT, provide telemetry and organizational tools for informational purposes only. The platform is a neutral peer-to-peer facilitator. You acknowledge that high-speed activities, including racing, involve inherent risks of injury, property damage, or death. By using this app, you expressly assume all risks associated with your activities, regardless of location or jurisdiction. OWENSONICINFINITY and its affiliates, developers, and DaisyAI agents assume zero liability for your actions, usage of software, or participation in any peer-to-peer event. There are no guarantees of accuracy, safety, or legal compliance in your specific jurisdiction.</p>
+            <p><strong>If you do not agree to these terms, terminate usage of the application immediately.</strong></p>
+            <div class="modal-buttons">
+                <button id="acceptDisclaimerBtn" class="btn">I Understand & Accept</button>
+                <button id="declineDisclaimerBtn" class="btn btn-magenta">Decline & Exit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== NFT POPUP CONTAINER ========== -->
+    <div id="nftPopup" class="nft-popup hidden"></div>
+
+    <!-- ========== SCRIPTS ========== -->
+    <script src="js/daisyos-core.js"></script>
+    <script src="js/daisy-flags.js"></script>
+    <script src="js/daisy-auth.js"></script>
+    <script src="js/daisy-settings.js"></script>
+    <script src="js/daisy-ai.js"></script>
+    <script src="js/daisy-nft.js"></script>
+    <script src="js/daisy-footer.js"></script>
+    <script src="js/app-sayso.js"></script>
+    <script src="js/app-daisyspeed.js"></script>
+    <script src="js/app-daisygt.js"></script>
+    <script src="js/app-daisyobjects.js"></script>
+    <script src="js/app-daisyinvestigation.js"></script>
+    <script>
+        // Initialize ecosystem on load
+        document.addEventListener('DOMContentLoaded', () => {
+            DaisyOS.init();
+        });
+    </script>
+</body>
+</html>
