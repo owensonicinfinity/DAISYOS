@@ -1,0 +1,311 @@
+/* ============================================================================
+   DAISYOS CORE ENGINE
+   ============================================================================ */
+const DaisyOS = {
+    // State
+    currentApp: 'sayso',
+    user: null,
+    settings: {
+        themeColor: '#00f0ff',
+        themeMode: 'dark',
+        fontSize: 16,
+        highContrast: false,
+        largeText: false,
+        colorBlind: false,
+        daisyVoice: true,
+        daisyAutonomous: false,
+        daisyWakeWord: 'Daisy'
+    },
+    
+    // Gemini API key
+    geminiApiKey: '', // User provides this
+    
+    // Init
+    init() {
+        this.loadSettings();
+        this.applyTheme();
+        this.setupNavigation();
+        this.setupSettingsPanel();
+        this.setupHelpPanel();
+        this.checkDisclaimer();
+        this.initFlags();
+        this.loadApp('sayso');
+        this.initAuth();
+        this.initDaisyAI();
+        console.log('🌼 DaisyOS Ecosystem initialized');
+    },
+    
+    // Settings
+    loadSettings() {
+        const saved = localStorage.getItem('daisyos-settings');
+        if (saved) {
+            this.settings = { ...this.settings, ...JSON.parse(saved) };
+        }
+        // Load Gemini key
+        const savedKey = localStorage.getItem('daisyos-gemini-key');
+        if (savedKey) this.geminiApiKey = savedKey;
+    },
+    
+    saveSettings() {
+        localStorage.setItem('daisyos-settings', JSON.stringify(this.settings));
+        this.applyTheme();
+    },
+    
+    applyTheme() {
+        const root = document.documentElement;
+        root.style.setProperty('--accent-primary', this.settings.themeColor);
+        root.style.setProperty('--font-size-base', this.settings.fontSize + 'px');
+        root.setAttribute('data-theme', this.settings.themeMode);
+        root.setAttribute('data-high-contrast', this.settings.highContrast);
+        root.setAttribute('data-color-blind', this.settings.colorBlind);
+        
+        // Update glows
+        root.style.setProperty('--glow-primary', `0 0 20px ${this.settings.themeColor}80, 0 0 40px ${this.settings.themeColor}4D`);
+    },
+    
+    // Navigation
+    setupNavigation() {
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const app = btn.dataset.app;
+                this.loadApp(app);
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+    },
+    
+    loadApp(appName) {
+        this.currentApp = appName;
+        const mainContent = document.getElementById('mainContent');
+        
+        // Show loading
+        mainContent.innerHTML = '<div class="text-center mt-20"><p>Loading...</p></div>';
+        
+        // Route to app module
+        const appLoaders = {
+            'sayso': () => SAYSO.render(mainContent),
+            'daisyspeed': () => DaisySpeedApp.render(mainContent),
+            'daisygt': () => DaisyGTApp.render(mainContent),
+            'daisyobjects': () => DaisyObjectsApp.render(mainContent),
+            'daisyinvestigation': () => DaisyInvestigationApp.render(mainContent),
+            'marketplace': () => NFTMarketplace.render(mainContent),
+            'profile': () => ProfilePage.render(mainContent),
+            'leaderboards': () => LeaderboardsPage.render(mainContent)
+        };
+        
+        if (appLoaders[appName]) {
+            appLoaders[appName]();
+        } else {
+            mainContent.innerHTML = '<p>App not found.</p>';
+        }
+        
+        // Scroll to top
+        window.scrollTo(0, 0);
+    },
+    
+    // Settings Panel
+    setupSettingsPanel() {
+        const gearBtn = document.getElementById('globalSettingsBtn');
+        const panel = document.getElementById('globalSettingsPanel');
+        const closeBtn = document.getElementById('closeSettingsBtn');
+        
+        gearBtn.addEventListener('click', () => panel.classList.toggle('hidden'));
+        closeBtn.addEventListener('click', () => panel.classList.add('hidden'));
+        
+        // Color presets
+        document.querySelectorAll('.color-preset').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.color-preset').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                this.settings.themeColor = btn.dataset.color === 'cyan' ? '#00f0ff' :
+                    btn.dataset.color === 'magenta' ? '#ff006e' :
+                    btn.dataset.color === 'lime' ? '#39ff14' :
+                    btn.dataset.color === 'purple' ? '#b537f2' :
+                    btn.dataset.color === 'orange' ? '#ff6600' :
+                    btn.dataset.color === 'pink' ? '#ff10f0' :
+                    btn.dataset.color === 'blue' ? '#0088ff' : '#00ff41';
+                this.saveSettings();
+            });
+        });
+        
+        // Custom color
+        document.getElementById('customColorInput').addEventListener('input', (e) => {
+            this.settings.themeColor = e.target.value;
+            this.saveSettings();
+        });
+        
+        // Theme mode
+        document.getElementById('themeModeSelect').addEventListener('change', (e) => {
+            this.settings.themeMode = e.target.value;
+            this.saveSettings();
+        });
+        
+        // Font size
+        const fontSizeSlider = document.getElementById('fontSizeSlider');
+        const fontSizeValue = document.getElementById('fontSizeValue');
+        fontSizeSlider.addEventListener('input', (e) => {
+            this.settings.fontSize = parseInt(e.target.value);
+            fontSizeValue.textContent = e.target.value + 'px';
+            this.saveSettings();
+        });
+        
+        // Toggles
+        document.getElementById('highContrastToggle').addEventListener('change', (e) => {
+            this.settings.highContrast = e.target.checked;
+            this.saveSettings();
+        });
+        document.getElementById('largeTextToggle').addEventListener('change', (e) => {
+            this.settings.largeText = e.target.checked;
+            if (e.target.checked) {
+                this.settings.fontSize = 20;
+                fontSizeSlider.value = 20;
+                fontSizeValue.textContent = '20px';
+            }
+            this.saveSettings();
+        });
+        document.getElementById('colorBlindToggle').addEventListener('change', (e) => {
+            this.settings.colorBlind = e.target.checked;
+            this.saveSettings();
+        });
+        document.getElementById('daisyVoiceToggle').addEventListener('change', (e) => {
+            this.settings.daisyVoice = e.target.checked;
+            this.saveSettings();
+        });
+        document.getElementById('daisyAutonomousToggle').addEventListener('change', (e) => {
+            this.settings.daisyAutonomous = e.target.checked;
+            this.saveSettings();
+        });
+        
+        // Wake word
+        document.getElementById('daisyWakeWord').addEventListener('change', (e) => {
+            this.settings.daisyWakeWord = e.target.value;
+            this.saveSettings();
+        });
+    },
+    
+    // Help Panel
+    setupHelpPanel() {
+        const helpBtn = document.getElementById('globalHelpBtn');
+        const panel = document.getElementById('globalHelpPanel');
+        const closeBtn = document.getElementById('closeHelpBtn');
+        
+        helpBtn.addEventListener('click', () => panel.classList.toggle('hidden'));
+        closeBtn.addEventListener('click', () => panel.classList.add('hidden'));
+        
+        document.getElementById('submitHelpBtn').addEventListener('click', () => {
+            const msg = document.getElementById('helpMessageInput').value;
+            if (msg.trim()) {
+                alert('Message sent to DaisyAI. We'll review your feedback.');
+                document.getElementById('helpMessageInput').value = '';
+                panel.classList.add('hidden');
+            }
+        });
+    },
+    
+    // Disclaimer
+    checkDisclaimer() {
+        if (!localStorage.getItem('daisyos-disclaimer-accepted')) {
+            document.getElementById('disclaimerModal').classList.remove('hidden');
+        }
+        document.getElementById('acceptDisclaimerBtn').addEventListener('click', () => {
+            localStorage.setItem('daisyos-disclaimer-accepted', 'true');
+            document.getElementById('disclaimerModal').classList.add('hidden');
+        });
+        document.getElementById('declineDisclaimerBtn').addEventListener('click', () => {
+            document.body.innerHTML = '<div style="color:#ff006e;text-align:center;padding:100px;"><h1>Access Denied</h1><p>You must accept the terms to use DaisyOS.</p></div>';
+        });
+    },
+    
+    // Floating Flags
+    initFlags() {
+        // Flags are initialized via daisy-flags.js
+        console.log('🏁 Chromatic flags initialized');
+    },
+    
+    // Auth
+    initAuth() {
+        document.getElementById('googleLoginBtn').addEventListener('click', () => {
+            // Mock Google Sign-In
+            this.user = {
+                id: 'user-' + Math.random().toString(36).substr(2, 9),
+                name: 'SpeedRacer' + Math.floor(Math.random() * 999),
+                email: 'racer@daisyos.com',
+                avatar: null,
+                initials: 'SR',
+                joined: new Date().toISOString(),
+                stats: { races: 0, wins: 0, speed: 0, nfts: 0 }
+            };
+            localStorage.setItem('daisyos-user', JSON.stringify(this.user));
+            this.updateAuthUI();
+        });
+        
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            this.user = null;
+            localStorage.removeItem('daisyos-user');
+            this.updateAuthUI();
+        });
+        
+        // Load saved user
+        const saved = localStorage.getItem('daisyos-user');
+        if (saved) {
+            this.user = JSON.parse(saved);
+            this.updateAuthUI();
+        }
+    },
+    
+    updateAuthUI() {
+        const preview = document.getElementById('userProfilePreview');
+        const loginBtn = document.getElementById('googleLoginBtn');
+        const nameDisplay = document.getElementById('userNameDisplay');
+        const avatarEl = document.getElementById('userAvatar');
+        
+        if (this.user) {
+            preview.classList.remove('hidden');
+            loginBtn.classList.add('hidden');
+            nameDisplay.textContent = this.user.name;
+            if (this.user.avatar) {
+                avatarEl.src = this.user.avatar;
+            } else {
+                avatarEl.style.display = 'none';
+                // Show initial
+                avatarEl.parentElement.querySelector('.avatar-placeholder')?.remove();
+                const placeholder = document.createElement('div');
+                placeholder.className = 'avatar-placeholder';
+                placeholder.style.cssText = 'width:40px;height:40px;border-radius:50%;background:var(--accent-primary);display:flex;align-items:center;justify-content:center;color:var(--bg-deep);font-weight:700;';
+                placeholder.textContent = this.user.initials || this.user.name[0];
+                avatarEl.parentElement.insertBefore(placeholder, avatarEl);
+            }
+        } else {
+            preview.classList.add('hidden');
+            loginBtn.classList.remove('hidden');
+        }
+    },
+    
+    // DaisyAI
+    initDaisyAI() {
+        if (window.DaisyAI) {
+            window.DaisyAI.init(this.geminiApiKey, this.settings);
+        }
+    },
+    
+    // NFT Popup
+    showNFTPopup(data) {
+        const popup = document.getElementById('nftPopup');
+        popup.innerHTML = `
+            <div style="display:flex;justify-content:space-between;">
+                <div>
+                    <strong>${data.title || 'Race NFT'}</strong>
+                    <p style="color:var(--accent-tertiary);font-size:18px;">${data.price || '0.05 ETH'}</p>
+                </div>
+                <button onclick="this.parentElement.parentElement.classList.add('hidden')" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:20px;">&times;</button>
+            </div>
+            <button class="btn btn-small" onclick="DaisyOS.loadApp('marketplace')">View</button>
+        `;
+        popup.classList.remove('hidden');
+        setTimeout(() => popup.classList.add('hidden'), 8000);
+    }
+};
+
+// Initialize on DOM ready
+document.addEventListener('DOMContentLoaded', () => DaisyOS.init());
