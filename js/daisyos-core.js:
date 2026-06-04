@@ -1,0 +1,185 @@
+/* ============================================================================
+   DAISYOS CORE ENGINE
+   Initialization, routing, app switching, global state
+   ============================================================================ */
+
+const DaisyOS = {
+    // Global state
+    state: {
+        currentApp: 'sayso',
+        user: null,
+        settings: {
+            accentColor: '#00f0ff',
+            themeMode: 'dark',
+            fontSize: 16,
+            highContrast: false,
+            largeText: false,
+            colorBlind: false,
+            daisyVoice: true,
+            daisyAutonomous: false,
+            daisyWakeWord: 'Daisy'
+        },
+        nftAdsShown: 0
+    },
+
+    // App registry
+    apps: {},
+
+    // Initialize
+    init() {
+        this.loadSettings();
+        this.applySettings();
+        this.initNavigation();
+        this.initDisclaimer();
+        this.loadApp('sayso');
+        console.log('🌼 DaisyOS Ecosystem Initialized');
+        console.log('   SAYSO | DaisySpeed | DaisyGT | DaisyObjects | DaisyInvestigation');
+        console.log('   Powered by DaisyOS | Driven by DaisyAI | Connected to Blockchain');
+    },
+
+    // Register an app module
+    registerApp(name, module) {
+        this.apps[name] = module;
+        console.log(`📱 App registered: ${name}`);
+    },
+
+    // Load an app into main content
+    loadApp(appName) {
+        this.state.currentApp = appName;
+        const mainContent = document.getElementById('mainContent');
+        if (!mainContent) return;
+
+        // Update nav buttons
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.app === appName);
+        });
+
+        // Clear and load app content
+        mainContent.innerHTML = '';
+        
+        if (this.apps[appName] && this.apps[appName].render) {
+            this.apps[appName].render(mainContent);
+        } else {
+            mainContent.innerHTML = `<div class="loading-screen">
+                <h2 style="font-family:var(--font-display);color:var(--accent-primary);">Loading ${appName}...</h2>
+                <p style="color:var(--text-secondary);">App module initializing</p>
+            </div>`;
+        }
+
+        // Scroll to top
+        window.scrollTo(0, 0);
+    },
+
+    // Navigation initialization
+    initNavigation() {
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const appName = btn.dataset.app;
+                if (appName) this.loadApp(appName);
+            });
+        });
+    },
+
+    // Disclaimer modal
+    initDisclaimer() {
+        const modal = document.getElementById('disclaimerModal');
+        const acceptBtn = document.getElementById('acceptDisclaimerBtn');
+        const declineBtn = document.getElementById('declineDisclaimerBtn');
+
+        // Check if already accepted
+        if (localStorage.getItem('daisyos_disclaimer_accepted') === 'true') {
+            if (modal) modal.classList.add('hidden');
+            return;
+        }
+
+        if (modal) modal.classList.remove('hidden');
+
+        if (acceptBtn) {
+            acceptBtn.addEventListener('click', () => {
+                localStorage.setItem('daisyos_disclaimer_accepted', 'true');
+                modal.classList.add('hidden');
+            });
+        }
+
+        if (declineBtn) {
+            declineBtn.addEventListener('click', () => {
+                document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;color:#ff006e;font-family:sans-serif;"><h1>You have declined the terms. Please close this page.</h1></div>';
+            });
+        }
+    },
+
+    // Settings management
+    loadSettings() {
+        const saved = localStorage.getItem('daisyos_settings');
+        if (saved) {
+            try {
+                const parsed = JSON.parse(saved);
+                this.state.settings = { ...this.state.settings, ...parsed };
+            } catch(e) {
+                console.warn('Failed to parse saved settings');
+            }
+        }
+    },
+
+    saveSettings() {
+        localStorage.setItem('daisyos_settings', JSON.stringify(this.state.settings));
+    },
+
+    applySettings() {
+        const s = this.state.settings;
+        const root = document.documentElement;
+
+        // Apply accent color
+        root.style.setProperty('--accent-primary', s.accentColor);
+        
+        // Apply theme
+        root.setAttribute('data-theme', s.themeMode === 'auto' ? 
+            (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : 
+            s.themeMode);
+
+        // Apply font size
+        root.style.setProperty('--font-size-base', s.fontSize + 'px');
+
+        // Apply accessibility
+        root.setAttribute('data-high-contrast', s.highContrast ? 'true' : 'false');
+        root.setAttribute('data-color-blind', s.colorBlind ? 'true' : 'false');
+
+        if (s.largeText) {
+            root.style.setProperty('--font-size-base', '20px');
+        }
+    },
+
+    // Update a setting
+    updateSetting(key, value) {
+        this.state.settings[key] = value;
+        this.saveSettings();
+        this.applySettings();
+    },
+
+    // Show NFT ad popup
+    showNFTAd(nftData) {
+        const popup = document.getElementById('nftPopup');
+        if (!popup) return;
+        
+        popup.innerHTML = `
+            <div style="display:flex;justify-content:space-between;align-items:start;">
+                <div>
+                    <h4 style="font-family:var(--font-heading);color:var(--accent-tertiary);margin-bottom:8px;">🔥 Featured NFT</h4>
+                    <p style="font-size:13px;color:var(--text-primary);margin-bottom:5px;">${nftData.title || 'Race Collectible'}</p>
+                    <p style="font-family:var(--font-mono);color:var(--accent-tertiary);font-size:16px;font-weight:700;">${nftData.price || '0.05 ETH'}</p>
+                </div>
+                <button onclick="document.getElementById('nftPopup').classList.add('hidden')" style="background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:20px;">&times;</button>
+            </div>
+            <button class="btn btn-small" style="margin-top:10px;width:100%;" onclick="DaisyOS.loadApp('marketplace')">View Marketplace</button>
+        `;
+        popup.classList.remove('hidden');
+        
+        // Auto-hide after 8 seconds
+        setTimeout(() => popup.classList.add('hidden'), 8000);
+        
+        this.state.nftAdsShown++;
+    }
+};
+
+// Export for module use
+window.DaisyOS = DaisyOS;
