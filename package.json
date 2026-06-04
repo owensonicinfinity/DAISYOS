@@ -1,0 +1,28 @@
+{
+  "name": "daisyos-ecosystem",
+  "version": "1.0.0",
+  "description": "Daisy GT - Global Racing Platform with Telemetry, Social, Blockchain, and Physical Training",
+  "author": "Douglas Owens Jr.",
+  "license": "UNLICENSED",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "start": "cd backend && npm start",
+    "setup": "npm install && cd frontend && npm install && cd ../backend && npm install",
+    "deploy:netlify": "cd frontend && npm run build"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  }
+}
