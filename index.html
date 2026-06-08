@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OwenSonicInfinity — Legacy Systems That Outlive Cycles</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root{
+  --c:#00f5c0;--g:#39ff14;--b:#0088cc;--pk:#ff2d78;
+  --pu:#9945ff;--or:#ff6b00;--gd:#ffd700;--rd:#ff4444;
+  --dk:#000008;--bd:rgba(0,245,192,0.1);
+  --card:rgba(0,245,192,0.03);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--dk);color:#dff0ec;font-family:'Rajdhani',sans-serif;overflow-x:hidden;}
+::-webkit-scrollbar{width:2px;}
+::-webkit-scrollbar-track{background:#000;}
+::-webkit-scrollbar-thumb{background:var(--c);}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:2000;display:flex;align-items:center;justify-content:space-between;padding:14px 28px;background:rgba(0,0,8,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--bd);}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:1.35rem;letter-spacing:3px;}
+.logo span{color:var(--c);}
+.nav-r{display:flex;gap:16px;align-items:center;}
+.nav-r a{color:rgba(255,255,255,0.4);text-decoration:none;font-size:.62rem;letter-spacing:2px;text-transform:uppercase;transition:color .2s;}
+.nav-r a:hover{color:var(--c);}
+.admin-btn{border:1px solid var(--c)!important;color:var(--c)!important;padding:4px 12px;font-size:.6rem!important;}
+.admin-btn:hover{background:var(--c)!important;color:#000!important;}
+
+/* ══════════════════════
+   HERO — SPACE + EARTH
+══════════════════════ */
+#hero{
+  position:relative;width:100%;height:100vh;min-height:680px;
+  overflow:hidden;display:flex;align-items:flex-end;
+  background:#000008;
+}
+/* Stars canvas */
+.stars-layer{position:absolute;inset:0;z-index:1;pointer-events:none;}
+/* Deep space nebula glow */
+.nebula{
+  position:absolute;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse 60% 40% at 65% 45%, rgba(0,30,60,0.8) 0%, transparent 70%),
+    radial-gradient(ellipse 30% 20% at 80% 20%, rgba(0,80,40,0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 20% 15% at 20% 70%, rgba(60,0,120,0.1) 0%, transparent 60%);
+}
+/* Orbital system */
+.orbital{
+  position:absolute;
+  top:50%;left:60%;
+  transform:translate(-50%,-50%);
+  width:520px;height:520px;
+  z-index:2;
+}
+/* The visible orbit ring */
+.orbit-circle{
+  position:absolute;inset:0;border-radius:50%;
+  border:1px solid rgba(0,136,204,0.3);
+  box-shadow:0 0 30px rgba(0,136,204,0.08),inset 0 0 80px rgba(0,0,30,0.6);
+}
+/* Second outer ring */
+.orbit-circle2{
+  position:absolute;inset:-35px;border-radius:50%;
+  border:1px solid rgba(0,245,192,0.06);
+}
+/* Earth */
+.earth{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:380px;height:380px;
+  border-radius:50%;
+  overflow:hidden;
+  box-shadow:
+    -90px -10px 140px rgba(0,0,0,1),
+    0 0 0 1px rgba(0,100,200,0.15),
+    inset -110px 0 160px rgba(0,0,0,0.95),
+    inset 30px 0 60px rgba(0,60,120,0.3);
+  z-index:4;
+}
+.earth-tex{
+  position:absolute;inset:0;border-radius:50%;
+  background:
+    radial-gradient(ellipse 45% 28% at 30% 42%,#1a5c1a 0%,transparent 100%),
+    radial-gradient(ellipse 35% 22% at 62% 52%,#235e18 0%,transparent 100%),
+    radial-gradient(ellipse 22% 18% at 18% 62%,#2a6620 0%,transparent 100%),
+    radial-gradient(ellipse 28% 20% at 78% 32%,#1e5a14 0%,transparent 100%),
+    radial-gradient(ellipse 16% 14% at 48% 78%,#183d10 0%,transparent 100%),
+    linear-gradient(135deg,#061a3a 0%,#0a2850 25%,#0d3870 50%,#0a2850 75%,#061a3a 100%);
+  background-size:180% 100%;
+  animation:earthSpin 90s linear infinite;
+}
+@keyframes earthSpin{from{background-position:0% 50%;}to{background-position:180% 50%;}}
+.earth-clouds{
+  position:absolute;inset:0;border-radius:50%;
+  background:
+    radial-gradient(ellipse 38% 9% at 38% 28%,rgba(255,255,255,.25) 0%,transparent 100%),
+    radial-gradient(ellipse 28% 7% at 68% 48%,rgba(255,255,255,.18) 0%,transparent 100%),
+    radial-gradient(ellipse 22% 6% at 22% 62%,rgba(255,255,255,.2) 0%,transparent 100%),
+    radial-gradient(ellipse 32% 8% at 58% 72%,rgba(255,255,255,.12) 0%,transparent 100%);
+  background-size:180% 100%;
+  animation:cloudSpin 130s linear infinite;
+}
+@keyframes cloudSpin{from{background-position:0% 50%;}to{background-position:180% 50%;}}
+.earth-atmo{
+  position:absolute;inset:-6px;border-radius:50%;
+  background:radial-gradient(circle at 62% 38%,transparent 55%,rgba(0,70,180,.35) 78%,rgba(0,100,255,.15) 100%);
+  z-index:5;pointer-events:none;
+}
+/* Satellite ring - ROTATES carrying the dots */
+.sat-ring{
+  position:absolute;inset:0;border-radius:50%;
+  animation:ringOrbit 50s linear infinite;
+  z-index:6;
+}
+.sat-ring.r2{animation:ringOrbitR 80s linear infinite;inset:-28px;width:calc(100% + 56px);height:calc(100% + 56px);position:absolute;top:-28px;left:-28px;}
+@keyframes ringOrbit{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+@keyframes ringOrbitR{from{transform:rotate(0deg);}to{transform:rotate(-360deg);}}
+.sat{
+  position:absolute;border-radius:50%;
+  background:var(--g);
+  box-shadow:0 0 8px var(--g),0 0 20px rgba(57,255,20,.4);
+  animation:satPulse 2.5s ease-in-out infinite;
+}
+@keyframes satPulse{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.4);opacity:.6;}}
+
+/* Hero text */
+.hero-txt{
+  position:relative;z-index:10;
+  padding:0 44px 72px;width:100%;
+}
+.sec-tag{
+  font-family:'Share Tech Mono',monospace;font-size:.6rem;
+  letter-spacing:5px;color:var(--c);text-transform:uppercase;
+  margin-bottom:12px;display:flex;align-items:center;gap:10px;
+}
+.sec-tag::before{content:'';display:block;width:32px;height:1px;background:var(--c);}
+.hero-h{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(2.8rem,6.5vw,5.5rem);
+  line-height:.93;letter-spacing:2px;max-width:620px;
+}
+.hero-p{margin-top:16px;font-size:1rem;color:rgba(255,255,255,.42);max-width:460px;line-height:1.7;font-weight:300;}
+.cta-row{display:flex;gap:12px;margin-top:24px;flex-wrap:wrap;}
+.btn-c{background:var(--c);color:#000;padding:12px 26px;font-family:'Bebas Neue',sans-serif;font-size:.88rem;letter-spacing:3px;text-decoration:none;border:none;cursor:pointer;transition:all .3s;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));}
+.btn-c:hover{background:var(--g);transform:translateY(-2px);}
+.btn-o{border:1px solid var(--c);color:var(--c);padding:12px 26px;font-family:'Bebas Neue',sans-serif;font-size:.88rem;letter-spacing:3px;text-decoration:none;cursor:pointer;background:transparent;transition:all .3s;}
+.btn-o:hover{background:rgba(0,245,192,.07);}
+.badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px;}
+.badge{font-family:'Share Tech Mono',monospace;font-size:.52rem;letter-spacing:2px;padding:5px 10px;border:1px solid rgba(0,245,192,.25);color:rgba(0,245,192,.6);display:flex;align-items:center;gap:5px;}
+.badge::before{content:'▣';font-size:.38rem;}
+
+/* ── STATS ── */
+.stats{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);}
+.stat{padding:28px 20px;text-align:center;border-right:1px solid var(--bd);}
+.stat:last-child{border-right:none;}
+.stat-n{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--c);line-height:1;}
+.stat-l{font-family:'Share Tech Mono',monospace;font-size:.52rem;letter-spacing:2px;color:rgba(255,255,255,.2);margin-top:5px;text-transform:uppercase;}
+
+/* ── 3-COL ── */
+.wrap{display:grid;grid-template-columns:200px 1fr 260px;}
+
+/* LEFT RAIL */
+.lrail{position:sticky;top:0;height:100vh;overflow-y:auto;border-right:1px solid var(--bd);padding:28px 0;background:rgba(0,0,0,.35);}
+.lrail::-webkit-scrollbar{width:1px;}
+.rt{font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:4px;color:rgba(255,255,255,.16);padding:0 18px;margin-bottom:16px;text-transform:uppercase;}
+.rl{display:block;padding:8px 18px;font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:2px;color:rgba(255,255,255,.28);text-decoration:none;text-transform:uppercase;border-left:2px solid transparent;transition:all .25s;}
+.rl:hover,.rl.on{color:var(--c);border-left-color:var(--c);background:rgba(0,245,192,.03);}
+.rsep{margin:16px 0;padding-top:16px;border-top:1px solid var(--bd);}
+
+/* CENTER */
+.ctr{padding:0;}
+.sec{padding:64px 40px;border-bottom:1px solid var(--bd);}
+.sl{font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:5px;color:var(--c);text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+.sl::before{content:'';width:24px;height:1px;background:var(--c);display:block;}
+.sh{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.8rem,3.5vw,2.8rem);letter-spacing:2px;line-height:1;margin-bottom:24px;}
+.sp{color:rgba(255,255,255,.45);font-size:.92rem;line-height:1.8;font-weight:300;max-width:660px;}
+.subh{font-family:'Bebas Neue',sans-serif;font-size:.9rem;letter-spacing:3px;color:var(--c);margin:24px 0 7px;}
+
+/* DIVISION CARDS */
+.div-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1px;background:var(--bd);border:1px solid var(--bd);}
+.dc{background:var(--dk);padding:28px 22px;transition:all .3s;cursor:pointer;position:relative;overflow:hidden;}
+.dc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--ac,#00f5c0),transparent);transform:translateX(-100%);transition:transform .5s;}
+.dc:hover::before{transform:translateX(0);}
+.dc:hover{background:rgba(0,245,192,.02);}
+.dc-ico{width:40px;height:40px;border:1px solid var(--ac,#00f5c0);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:1rem;margin-bottom:14px;}
+.dc-n{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px;color:var(--ac,#00f5c0);margin-bottom:4px;}
+.dc-t{font-family:'Share Tech Mono',monospace;font-size:.52rem;letter-spacing:3px;color:rgba(255,255,255,.2);text-transform:uppercase;margin-bottom:9px;}
+.dc-d{font-size:.83rem;color:rgba(255,255,255,.4);line-height:1.6;font-weight:300;}
+.dc-pr{margin-top:12px;font-family:'Share Tech Mono',monospace;font-size:.55rem;letter-spacing:2px;padding:3px 8px;border:1px solid var(--ac,#00f5c0);display:inline-block;color:var(--ac,#00f5c0);}
+.dc-badge{position:absolute;top:10px;right:10px;font-family:'Share Tech Mono',monospace;font-size:.45rem;letter-spacing:1px;padding:2px 6px;background:rgba(57,255,20,.07);border:1px solid var(--g);color:var(--g);}
+
+/* WIP */
+.wip{display:flex;flex-direction:column;}
+.wi{padding:14px 18px;border-bottom:1px solid var(--bd);display:flex;align-items:flex-start;gap:12px;transition:background .25s;}
+.wi:hover{background:rgba(0,245,192,.02);}
+.wd{width:7px;height:7px;border-radius:50%;margin-top:4px;flex-shrink:0;}
+.wn{font-family:'Bebas Neue',sans-serif;font-size:.9rem;letter-spacing:2px;margin-bottom:2px;}
+.wdesc{font-size:.78rem;color:rgba(255,255,255,.3);line-height:1.5;font-weight:300;}
+.wtag{font-family:'Share Tech Mono',monospace;font-size:.48rem;letter-spacing:2px;padding:2px 6px;border:1px solid;margin-top:4px;display:inline-block;}
+
+/* DAISY AI CHAT */
+.dbox{background:rgba(0,245,192,.02);border:1px solid var(--bd);}
+.dhdr{background:rgba(0,245,192,.06);padding:12px 15px;display:flex;align-items:center;gap:9px;border-bottom:1px solid var(--bd);}
+.dav{width:30px;height:30px;border-radius:50%;background:radial-gradient(circle,var(--g),var(--c));display:flex;align-items:center;justify-content:center;font-size:.8rem;}
+.dst{font-family:'Share Tech Mono',monospace;font-size:.5rem;color:var(--g);letter-spacing:2px;}
+.dmsgs{padding:16px;display:flex;flex-direction:column;gap:10px;max-height:280px;overflow-y:auto;}
+.dmsgs::-webkit-scrollbar{width:1px;}
+.ma{background:rgba(0,245,192,.05);border:1px solid rgba(0,245,192,.1);padding:10px 13px;border-radius:0 7px 7px 7px;font-size:.83rem;line-height:1.6;max-width:92%;}
+.ma .al{font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:3px;color:var(--c);margin-bottom:4px;}
+.pills{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;}
+.pill{background:rgba(0,245,192,.06);border:1px solid rgba(0,245,192,.22);color:var(--c);padding:3px 10px;font-family:'Share Tech Mono',monospace;font-size:.55rem;letter-spacing:1px;cursor:pointer;border-radius:18px;transition:all .2s;}
+.pill:hover{background:rgba(0,245,192,.16);}
+.dinp{padding:12px 15px;border-top:1px solid var(--bd);display:flex;gap:7px;}
+.di{flex:1;background:rgba(255,255,255,.03);border:1px solid var(--bd);color:#fff;padding:7px 12px;font-family:'Rajdhani',sans-serif;font-size:.85rem;outline:none;}
+.di:focus{border-color:var(--c);}
+.ds{width:30px;height:30px;background:var(--c);border:none;cursor:pointer;color:#000;transition:background .2s;}
+.ds:hover{background:var(--g);}
+
+/* ADMIN MODAL */
+.admin-modal{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);backdrop-filter:blur(10px);align-items:center;justify-content:center;}
+.admin-modal.open{display:flex;}
+.admin-box{background:#000812;border:1px solid var(--c);padding:40px;width:460px;max-width:90vw;position:relative;}
+.admin-close{position:absolute;top:14px;right:18px;background:none;border:none;color:rgba(255,255,255,.4);font-size:1.2rem;cursor:pointer;transition:color .2s;}
+.admin-close:hover{color:var(--c);}
+.admin-h{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:3px;color:var(--c);margin-bottom:6px;}
+.admin-sub{font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:2px;color:rgba(255,255,255,.25);margin-bottom:28px;}
+.afield{margin-bottom:16px;}
+.afield label{font-family:'Share Tech Mono',monospace;font-size:.55rem;letter-spacing:3px;color:rgba(255,255,255,.4);text-transform:uppercase;display:block;margin-bottom:6px;}
+.afield input{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--bd);color:#fff;padding:10px 14px;font-family:'Share Tech Mono',monospace;font-size:.75rem;outline:none;transition:border-color .2s;}
+.afield input:focus{border-color:var(--c);}
+.ai-status{display:flex;flex-direction:column;gap:8px;margin:20px 0;padding:14px;border:1px solid var(--bd);background:rgba(0,245,192,.02);}
+.ai-row{display:flex;justify-content:space-between;align-items:center;font-family:'Share Tech Mono',monospace;font-size:.58rem;}
+.ai-dot{width:6px;height:6px;border-radius:50%;display:inline-block;margin-right:6px;}
+.ai-dot.on{background:var(--g);box-shadow:0 0 6px var(--g);}
+.ai-dot.off{background:rgba(255,255,255,.2);}
+
+/* NFT */
+.nft-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;}
+.nc{background:var(--card);border:1px solid var(--bd);overflow:hidden;transition:all .3s;cursor:pointer;}
+.nc:hover{border-color:var(--c);transform:translateY(-2px);}
+.ni{width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:2rem;background:linear-gradient(135deg,rgba(0,245,192,.07),rgba(0,136,204,.07));}
+.ninfo{padding:11px;}
+.nn{font-family:'Bebas Neue',sans-serif;font-size:.9rem;letter-spacing:1px;}
+.np{font-family:'Share Tech Mono',monospace;font-size:.55rem;color:var(--c);margin-top:2px;}
+
+/* VORTEX */
+.vx{background:linear-gradient(135deg,rgba(0,0,0,.92),rgba(0,16,5,.92));border:1px solid rgba(57,255,20,.14);padding:40px;position:relative;overflow:hidden;}
+.vx::after{content:'VORTEX X1';position:absolute;right:-15px;top:50%;transform:translateY(-50%) rotate(90deg);font-family:'Bebas Neue',sans-serif;font-size:4rem;letter-spacing:10px;color:rgba(57,255,20,.025);white-space:nowrap;}
+.vstats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:24px;}
+.vs{text-align:center;padding:16px;border:1px solid rgba(57,255,20,.13);}
+.vn{font-family:'Bebas Neue',sans-serif;font-size:1.9rem;color:var(--g);}
+.vl{font-family:'Share Tech Mono',monospace;font-size:.52rem;letter-spacing:2px;color:rgba(255,255,255,.2);margin-top:3px;}
+
+/* STACK */
+.stack{font-family:'Share Tech Mono',monospace;font-size:.7rem;background:rgba(0,0,0,.5);border:1px solid var(--bd);padding:22px;}
+.sl2{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(0,245,192,.04);}
+.sl2:last-child{border:none;}
+.sln{color:rgba(255,255,255,.12);min-width:20px;}
+.sld{color:rgba(255,255,255,.2);font-size:.55rem;margin-left:auto;}
+
+/* R&D */
+.rflow{display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--bd);}
+.rs{flex:1;min-width:100px;padding:16px 12px;border-right:1px solid var(--bd);}
+.rs:last-child{border-right:none;}
+.rn{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:rgba(0,245,192,.07);line-height:1;}
+.rl2{font-family:'Share Tech Mono',monospace;font-size:.52rem;letter-spacing:2px;color:var(--c);margin-top:4px;text-transform:uppercase;}
+
+/* CONTACT */
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:40px;}
+.cl{display:flex;align-items:center;gap:8px;color:var(--c);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:.65rem;letter-spacing:2px;margin-bottom:8px;transition:gap .25s;}
+.cl:hover{gap:15px;}
+.fi{background:rgba(255,255,255,.03);border:1px solid var(--bd);color:#fff;padding:10px 13px;font-family:'Rajdhani',sans-serif;font-size:.9rem;outline:none;width:100%;margin-bottom:8px;transition:border-color .25s;}
+.fi:focus{border-color:var(--c);}
+textarea.fi{resize:vertical;min-height:90px;}
+
+/* SIGNAL */
+.sigsec{text-align:center;padding:56px 36px;border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);background:radial-gradient(ellipse at center,rgba(0,245,192,.025) 0%,transparent 70%);}
+.sigrow{display:flex;gap:0;max-width:420px;margin:20px auto 0;}
+.sigi{flex:1;background:rgba(255,255,255,.03);border:1px solid var(--bd);border-right:none;color:#fff;padding:10px 13px;font-family:'Rajdhani',sans-serif;font-size:.9rem;outline:none;}
+.sigi:focus{border-color:var(--c);}
+.sigb{background:var(--c);border:none;cursor:pointer;padding:0 20px;font-family:'Bebas Neue',sans-serif;font-size:.78rem;letter-spacing:3px;color:#000;transition:background .25s;}
+.sigb:hover{background:var(--g);}
+
+/* RIGHT RAIL */
+.rrail{position:sticky;top:0;height:100vh;overflow-y:auto;border-left:1px solid var(--bd);padding:28px 0;background:rgba(0,0,0,.2);}
+.rrail::-webkit-scrollbar{width:1px;}
+.rc{padding:16px 18px;border-bottom:1px solid var(--bd);}
+.rct{font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:4px;color:var(--c);text-transform:uppercase;margin-bottom:10px;}
+.ri{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.025);cursor:pointer;transition:all .2s;}
+.ri:last-child{border:none;}
+.ri:hover .rn2{color:var(--c);}
+.rdot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+.rn2{font-family:'Bebas Neue',sans-serif;font-size:.78rem;letter-spacing:1px;transition:color .2s;}
+.rs2{font-family:'Share Tech Mono',monospace;font-size:.48rem;color:rgba(255,255,255,.2);letter-spacing:1px;}
+.wr{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.025);font-family:'Share Tech Mono',monospace;font-size:.55rem;}
+.wr:last-child{border:none;}
+.wv{color:var(--c);}
+
+/* FOOTER */
+footer{padding:28px 36px;border-top:1px solid var(--bd);background:rgba(0,0,0,.3);}
+.ft{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:20px;}
+.fl{font-family:'Bebas Neue',sans-serif;font-size:.9rem;letter-spacing:3px;}
+.fl span{color:var(--c);}
+.fm{font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:1px;color:rgba(255,255,255,.18);line-height:2.2;text-align:center;}
+.flinks{display:flex;gap:14px;flex-wrap:wrap;}
+.flinks a{font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:2px;color:rgba(255,255,255,.22);text-decoration:none;transition:color .2s;}
+.flinks a:hover{color:var(--c);}
+.legal-footer{margin-top:20px;padding-top:18px;border-top:1px solid var(--bd);font-family:'Share Tech Mono',monospace;font-size:.48rem;letter-spacing:1px;color:rgba(255,255,255,.14);line-height:2;text-align:center;}
+
+/* FADE */
+.fa{opacity:0;transform:translateY(20px);transition:opacity .65s,transform .65s;}
+.fa.v{opacity:1;transform:translateY(0);}
+
+/* MISSION */
+.mb{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.4rem,2.4vw,2.1rem);line-height:1.3;letter-spacing:1px;color:rgba(255,255,255,.78);}
+.mb em{color:var(--c);font-style:normal;}
+
+/* RESPONSIVE */
+@media(max-width:1100px){.wrap{grid-template-columns:1fr;}.lrail,.rrail{display:none;}}
+@media(max-width:768px){nav{padding:12px 16px;}.nav-r a:not(.admin-btn){display:none;}.hero-txt{padding:0 18px 52px;}.sec{padding:48px 18px;}.stats{grid-template-columns:repeat(3,1fr);}.cgrid{grid-template-columns:1fr;}.vstats{grid-template-columns:1fr;}.orbital{width:300px;height:300px;left:55%;}.earth{width:220px;height:220px;}footer{flex-direction:column;text-align:center;}}
+</style>
+</head>
+<body>
+
+<!-- ADMIN MODAL -->
+<div class="admin-modal" id="adminModal">
+  <div class="admin-box">
+    <button class="admin-close" onclick="closeAdmin()">✕</button>
+    <div class="admin-h">ADMIN PANEL</div>
+    <div class="admin-sub">OWENSONICINFINITY · DOUG ONLY</div>
+    <div class="afield">
+      <label>Email Login</label>
+      <input type="email" id="adminEmail" placeholder="owensonicinfinity@gmail.com">
+    </div>
+    <div class="afield">
+      <label>Password</label>
+      <input type="password" id="adminPass" placeholder="••••••••••">
+    </div>
+    <button class="btn-c" style="width:100%;padding:12px;border:none;margin-bottom:20px;" onclick="adminLogin()">ACCESS SYSTEM</button>
+    <div id="adminPanel" style="display:none;">
+      <div class="admin-sub" style="margin-bottom:16px;">AI CONFIGURATION</div>
+      <div class="afield">
+        <label>Gemini API Key</label>
+        <input type="password" id="geminiKey" placeholder="AIza...">
+      </div>
+      <div class="afield">
+        <label>HuggingFace Token (fallback)</label>
+        <input type="password" id="hfKey" placeholder="hf_...">
+      </div>
+      <div class="afield">
+        <label>Ollama Local URL (fallback)</label>
+        <input type="text" id="ollamaUrl" placeholder="http://localhost:11434" value="http://localhost:11434">
+      </div>
+      <div class="ai-status">
+        <div class="ai-row"><span><span class="ai-dot" id="dot-gemini"></span>Gemini API</span><span id="status-gemini" style="color:rgba(255,255,255,.3);">NOT SET</span></div>
+        <div class="ai-row"><span><span class="ai-dot" id="dot-hf"></span>HuggingFace</span><span id="status-hf" style="color:rgba(255,255,255,.3);">NOT SET</span></div>
+        <div class="ai-row"><span><span class="ai-dot" id="dot-ollama"></span>Ollama Local</span><span id="status-ollama" style="color:rgba(255,255,255,.3);">CHECKING...</span></div>
+      </div>
+      <button class="btn-c" style="width:100%;padding:10px;border:none;" onclick="saveAdminConfig()">SAVE CONFIGURATION</button>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">OWEN<span>SONIC</span>INFINITY</div>
+  <div class="nav-r">
+    <a href="#s02">Background</a>
+    <a href="#s03">Mission</a>
+    <a href="#s05">Ecosystem</a>
+    <a href="#s07">Daisy AI</a>
+    <a href="#s08">NFT</a>
+    <a href="#s09">Hardware</a>
+    <a href="#s10">MasterShell</a>
+    <a href="#s13">Contact</a>
+    <a href="#" class="admin-btn" onclick="openAdmin(event)">ADMIN</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div id="s01" style="position:relative;width:100%;height:100vh;min-height:680px;overflow:hidden;display:flex;align-items:flex-end;background:#000008;">
+  <div class="nebula"></div>
+  <canvas class="stars-layer" id="starsCanvas"></canvas>
+
+  <!-- ORBITAL SYSTEM -->
+  <div class="orbital" id="orb">
+    <div class="orbit-circle2"></div>
+    <div class="orbit-circle"></div>
+    <!-- Earth -->
+    <div class="earth">
+      <div class="earth-tex"></div>
+      <div class="earth-clouds"></div>
+      <div class="earth-atmo"></div>
+    </div>
+    <!-- Satellite rings -->
+    <div class="sat-ring" id="sr1"></div>
+    <div class="sat-ring r2" id="sr2"></div>
+  </div>
+
+  <div class="hero-txt">
+    <div class="sec-tag">Sector 01 / Home</div>
+    <h1 class="hero-h">WE BUILD SYSTEMS THAT OUTLIVE CYCLES.</h1>
+    <p class="hero-p">Owensonic Infinity designs, engineers, and deploys long-form systems. Not disposable products. Not trend-chasing software. Not fragile infrastructure.<br><br>Everything is documented. Nothing is hidden.</p>
+    <div class="cta-row">
+      <a href="#s05" class="btn-c">ENTER THE ECOSYSTEM</a>
+      <a href="#s07" class="btn-o">TALK TO DAISY</a>
+    </div>
+    <div class="badges">
+      <div class="badge">Powered by DaisyOS</div>
+      <div class="badge">Driven by DaisyAI</div>
+      <div class="badge">Connected to Blockchain</div>
+      <div class="badge">Patent Pending</div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><div class="stat-n">25+</div><div class="stat-l">Years R&D</div></div>
+  <div class="stat"><div class="stat-n">8</div><div class="stat-l">Ecosystem Apps</div></div>
+  <div class="stat"><div class="stat-n">1200</div><div class="stat-l">CFM Vortex X1</div></div>
+  <div class="stat"><div class="stat-n">3</div><div class="stat-l">Kickstarters</div></div>
+  <div class="stat"><div class="stat-n">∞</div><div class="stat-l">Support Warranty</div></div>
+</div>
+
+<!-- 3-COL -->
+<div class="wrap">
+
+<!-- LEFT RAIL -->
+<aside class="lrail">
+  <div class="rt">SITE MAP / DIRECTORY</div>
+  <a href="#s01" class="rl">Sector 01 / Home</a>
+  <a href="#s02" class="rl">Sector 02 / Background</a>
+  <a href="#s03" class="rl">Sector 03 / Mission</a>
+  <a href="#s04" class="rl">Sector 04 / R&D</a>
+  <a href="#s05" class="rl">Sector 05 / Ecosystem</a>
+  <a href="#s06" class="rl">Sector 06 / WIP</a>
+  <a href="#s07" class="rl">Sector 07 / Daisy AI</a>
+  <a href="#s08" class="rl">Sector 08 / NFT</a>
+  <a href="#s09" class="rl">Sector 09 / Hardware</a>
+  <a href="#s10" class="rl">Sector 10 / MasterShell</a>
+  <a href="#s11" class="rl">Sector 11 / RPM Oracle</a>
+  <a href="#s12" class="rl">Sector 12 / Kickstarter</a>
+  <a href="#s13" class="rl">Sector 13 / Signal</a>
+  <a href="#s14" class="rl">Sector 14 / Contact</a>
+  <div class="rsep">
+    <div class="rt">DAISY APPS</div>
+    <a href="#s05" class="rl" style="color:rgba(0,245,192,.5);">● SAYSO</a>
+    <a href="#s05" class="rl" style="color:rgba(57,255,20,.5);">● DaisySpeed</a>
+    <a href="#s05" class="rl" style="color:rgba(255,45,120,.5);">● DaisyGT</a>
+    <a href="#s05" class="rl" style="color:rgba(153,69,255,.5);">● DaisyObjects</a>
+    <a href="#s05" class="rl" style="color:rgba(0,180,255,.5);">● DaisyInvestigation</a>
+    <a href="#s05" class="rl" style="color:rgba(255,107,0,.5);">● DaisyChain</a>
+    <a href="#s11" class="rl" style="color:rgba(255,215,0,.5);">● RPM Oracle</a>
+    <a href="#s05" class="rl" style="color:rgba(0,245,192,.5);">● DaisyOS Hub</a>
+  </div>
+  <div class="rsep">
+    <div class="rt">LINKS</div>
+    <a href="https://owensonicinfinity.netlify.app" target="_blank" class="rl">↗ Netlify</a>
+    <a href="https://owensonicinfinity.github.io" target="_blank" class="rl">↗ GitHub</a>
+    <a href="tel:4402816270" class="rl">📞 440-281-6270</a>
+    <a href="mailto:owensonicinfinity@gmail.com" class="rl">✉ Email</a>
+  </div>
+</aside>
+
+<!-- CENTER -->
+<main class="ctr">
+
+  <!-- S02 BACKGROUND -->
+  <section class="sec fa" id="s02">
+    <div class="sl">Sector 02 / Background</div>
+    <h2 class="sh">BACKGROUND & PHILOSOPHY</h2>
+    <p class="sp">Owensonic Infinity was not formed from branding exercises, investor decks, or abstract planning. It was built from decades of hands-on experience, repeated failure, correction, and refinement across mechanical systems, industrial environments, and operational design.</p>
+    <div class="subh">BASEMENT-BUILT REALITY</div>
+    <p class="sp">This work started in basements, garages, back rooms, and improvised workspaces. Clutches were rebuilt and redesigned for motorized bike engine kits, pushing performance beyond stock limitations. Parts were not accepted as-is. They were dissected, analyzed, modified, and reassembled until they behaved correctly under load.</p>
+    <div class="subh">INDUSTRIAL SYSTEMS AND STEEL INNOVATION</div>
+    <p class="sp">In steelmaking environments, existing sampling methods were inefficient, dangerous, and expensive. An eight-pound sampler was designed and built — deployable directly into ladles or bottle cars, collapsing sampling costs from thousands of dollars into a simple, repeatable, low-cost process.</p>
+    <div class="subh">AEROSPACE THINKING, APPLIED EVERYWHERE</div>
+    <p class="sp">Redundancy, failure analysis, load paths, and lifecycle considerations were treated as mandatory, not optional — applied everywhere regardless of industry.</p>
+    <div class="subh">WHY OWENSONIC INFINITY EXISTS</div>
+    <p class="sp">Most systems are built to survive just long enough, extract value, and collapse gracefully. Owensonic Infinity replaces that pattern with permanence, accountability, and evolution-driven design.</p>
+  </section>
+
+  <!-- S03 MISSION -->
+  <section class="sec fa" id="s03" style="background:radial-gradient(ellipse at 20% 50%,rgba(0,245,192,.025) 0%,transparent 60%);">
+    <div class="sl">Sector 03 / Mission</div>
+    <h2 class="sh">MISSION SINGULARITY</h2>
+    <div class="mb">
+      <em>Tomorrow is not guaranteed.</em> The end can arrive mid-breath.<br><br>
+      We operate with urgency, not fear. We build legacy that survives <em>corrosion, recalls, market collapses,</em> and institutional failure.<br><br>
+      Every creation carries <em>lineage.</em> Not branding. Not symbolism. Lineage.<br><br>
+      We do not sell dreams. <em>We build reality</em> loud enough that doubt disappears.<br><br>
+      Every product is treated like family. There are no orphaned systems. <em>Warranty is infinite.</em><br><br>
+      Research and development is not a department. <em>It is the spine.</em>
+    </div>
+    <div style="margin-top:30px;font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:3px;color:rgba(255,255,255,.2);">— Douglas C. Owens Jr. · Elyria/Cleveland, Ohio · owensonicinfinity@gmail.com · 440-281-6270</div>
+  </section>
+
+  <!-- S04 R&D -->
+  <section class="sec fa" id="s04">
+    <div class="sl">Sector 04 / R&D</div>
+    <h2 class="sh">RESEARCH & DEVELOPMENT</h2>
+    <p class="sp">A controlled system designed to eliminate failure before it exists. Not an experiment loop.</p>
+    <div class="rflow" style="margin-top:20px;">
+      <div class="rs"><div class="rn">01</div><div class="rl2">Signal Detection</div></div>
+      <div class="rs"><div class="rn">02</div><div class="rl2">Concept Isolation</div></div>
+      <div class="rs"><div class="rn">03</div><div class="rl2">Architecture</div></div>
+      <div class="rs"><div class="rn">04</div><div class="rl2">Stress Modeling</div></div>
+      <div class="rs"><div class="rn">05</div><div class="rl2">Redundancy</div></div>
+      <div class="rs"><div class="rn">06</div><div class="rl2">Prototype</div></div>
+      <div class="rs"><div class="rn">07</div><div class="rl2">Failure Mapping</div></div>
+      <div class="rs"><div class="rn">08</div><div class="rl2">Deploy</div></div>
+    </div>
+    <div class="subh">FAILURE IS MAPPED FIRST</div>
+    <p class="sp">Weak points are not discovered later. They are hunted immediately. Survivability is the baseline. Performance is layered on top.</p>
+    <div class="subh">ITERATION WITHOUT AMNESIA</div>
+    <p class="sp">Nothing is discarded without record. Knowledge compounds. We do not relearn lessons.</p>
+    <div class="subh">DEPLOYMENT IS NOT COMPLETION</div>
+    <p class="sp">Release marks the beginning of observation, not the end of responsibility.</p>
+  </section>
+
+  <!-- S05 ECOSYSTEM -->
+  <section class="sec fa" id="s05">
+    <div class="sl">Sector 05 / Daisy Ecosystem</div>
+    <h2 class="sh">THE DAISY ECOSYSTEM</h2>
+    <p class="sp" style="margin-bottom:24px;">Eight interconnected apps. One unified AI. One identity. Each works independently or together for enhanced cross-app features. All data local-first. Cloud opt-in only.</p>
+    <div class="div-grid">
+      <div class="dc" style="--ac:#00f5c0;"><div class="dc-badge">LIVE</div><div class="dc-ico" style="--ac:#00f5c0;">💬</div><div class="dc-n">SAYSO</div><div class="dc-t">Your Voice. Your World.</div><div class="dc-d">Unified social platform. Posts, stories, live streams, DMs, NFT marketplace, blockchain commerce, Daisy AI built in. TikTok-style lives, racing communities, group chats.</div><div class="dc-pr">FREE</div></div>
+      <div class="dc" style="--ac:#39ff14;"><div class="dc-badge">LIVE</div><div class="dc-ico" style="--ac:#39ff14;">⚡</div><div class="dc-n">DAISYSPEED</div><div class="dc-t">Track Any Speed. Anywhere.</div><div class="dc-d">Real GPS speed tracking for any moving object. AR crosshair, TensorFlow object detection, night vision, wildlife ID, Hunters Edition with wearables and AI guide.</div><div class="dc-pr">FREEMIUM · PRO $4.99</div></div>
+      <div class="dc" style="--ac:#ff2d78;"><div class="dc-badge">LIVE</div><div class="dc-ico" style="--ac:#ff2d78;">🏁</div><div class="dc-n">DAISYGT</div><div class="dc-t">Born to Race.</div><div class="dc-d">Drag racing telemetry. Quarter-mile, G-force, bracket tournaments, AI 3-beep synchronized start, blockchain escrow betting, race video recording.</div><div class="dc-pr">FREEMIUM · PRO $6.99</div></div>
+      <div class="dc" style="--ac:#9945ff;"><div class="dc-ico" style="--ac:#9945ff;">🔍</div><div class="dc-n">DAISYOBJECTS</div><div class="dc-t">See Everything. Know Everything.</div><div class="dc-d">Real-time AR object detection. 80+ classes, vehicle ID, license plate OCR, hunting addon, AI hunting guide, forensics & detective mode.</div><div class="dc-pr">FREE / PRO $4.99</div></div>
+      <div class="dc" style="--ac:#00b4ff;"><div class="dc-ico" style="--ac:#00b4ff;">🕵️</div><div class="dc-n">DAISYINVESTIGATION</div><div class="dc-t">Precision Justice.</div><div class="dc-d">Forensic platform for law enforcement. AI Investigation Director, 8-phase case guidance, blockchain evidence chain of custody. Gov license required.</div><div class="dc-pr">$9,999/YR · GOV</div></div>
+      <div class="dc" style="--ac:#ff6b00;"><div class="dc-ico" style="--ac:#ff6b00;">🛡️</div><div class="dc-n">DAISYCHAIN</div><div class="dc-t">Security. Everywhere.</div><div class="dc-d">Unified security suite. VPN, honeypot intrusion detection, malware scanner, network monitoring, SHA-256 chain of custody. Protects entire ecosystem.</div><div class="dc-pr">FREEMIUM</div></div>
+      <div class="dc" style="--ac:#ffd700;"><div class="dc-ico" style="--ac:#ffd700;">🏎️</div><div class="dc-n">RPM ORACLE</div><div class="dc-t">Raging Performance Matrix.</div><div class="dc-d">Vehicle performance tools. Vortex X1 integration, engine audio diagnostics, drag simulation, torque/G-force readout. All tech tools live here.</div><div class="dc-pr">FROM $1.99/PACK</div></div>
+      <div class="dc" style="--ac:#00f5c0;"><div class="dc-ico" style="--ac:#00f5c0;">🌼</div><div class="dc-n">DAISYOS HUB</div><div class="dc-t">The Ecosystem Dashboard.</div><div class="dc-d">Unified dashboard. DaisyApps store, NFT marketplace, SAYSO wallet (ETH/MATIC/SOL), unified profile, cross-app leaderboards, all apps in one place.</div><div class="dc-pr">FREE</div></div>
+    </div>
+    <div style="margin-top:20px;padding:16px;border:1px solid var(--bd);background:rgba(0,245,192,.02);">
+      <div style="font-family:'Share Tech Mono',monospace;font-size:.55rem;letter-spacing:3px;color:var(--c);margin-bottom:9px;">BUNDLE OFFERS</div>
+      <div style="display:flex;flex-wrap:wrap;gap:9px;">
+        <div style="border:1px solid var(--bd);padding:8px 12px;font-family:'Share Tech Mono',monospace;font-size:.55rem;color:rgba(255,255,255,.35);">🏎️ Racing Bundle · <span style="color:var(--c);">20% OFF</span></div>
+        <div style="border:1px solid var(--bd);padding:8px 12px;font-family:'Share Tech Mono',monospace;font-size:.55rem;color:rgba(255,255,255,.35);">🦌 Hunting Bundle · <span style="color:var(--c);">20% OFF</span></div>
+        <div style="border:1px solid var(--bd);padding:8px 12px;font-family:'Share Tech Mono',monospace;font-size:.55rem;color:rgba(255,255,255,.35);">🌼 Complete Bundle · <span style="color:var(--c);">25% OFF</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S06 WIP -->
+  <section class="sec fa" id="s06">
+    <div class="sl">Sector 06 / Active / WIP</div>
+    <h2 class="sh">ACTIVE & COMING SOON</h2>
+    <div class="wip">
+      <div class="wi"><div class="wd" style="background:var(--c);box-shadow:0 0 7px var(--c);"></div><div><div class="wn">DAISYOS PLATFORM</div><div class="wdesc">Fully integrated AI OS. Automates workflows, predicts actions, orchestrates all device ecosystems. Local-first, no cloud required.</div><div class="wtag" style="border-color:var(--c);color:var(--c);">ACTIVE</div></div></div>
+      <div class="wi"><div class="wd" style="background:var(--g);box-shadow:0 0 7px var(--g);"></div><div><div class="wn">KICKSTARTER — VORTEX X1 & FIRESTORM</div><div class="wdesc">Two Kickstarter campaigns launching: Vortex X1 zero-restriction throttle body and Firestorm Plasma Spark Injector. Both patent-pending.</div><div class="wtag" style="border-color:var(--g);color:var(--g);">COMING SOON</div></div></div>
+      <div class="wi"><div class="wd" style="background:var(--b);box-shadow:0 0 5px var(--b);"></div><div><div class="wn">NEUROGILDE SMART GLASSES</div><div class="wdesc">AR birdbath optics, micro projectors per eye, IR eye tracking, 360° cameras, LLLT wellness laser, DaisyOS integration. Stereo AR HUD.</div><div class="wtag" style="border-color:var(--b);color:var(--b);">PROTOTYPE</div></div></div>
+      <div class="wi"><div class="wd" style="background:var(--gd);box-shadow:0 0 5px var(--gd);"></div><div><div class="wn">VORTEX X1 THROTTLE BODY</div><div class="wdesc">Zero-restriction proprietary design. 860→1,200 CFM. 18-23% airflow efficiency gain. LS6/LS7 compatible. Kickstarter campaign ready.</div><div class="wtag" style="border-color:var(--gd);color:var(--gd);">PATENT PENDING</div></div></div>
+      <div class="wi"><div class="wd" style="background:var(--pk);box-shadow:0 0 5px var(--pk);"></div><div><div class="wn">FIRESTORM PLASMA SPARK INJECTOR</div><div class="wdesc">Owensonic Plasma Spark Injector (OPSI). Proprietary plasma-assisted ignition architecture. High-energy ignition kernel. NDA-gated. Kickstarter campaign ready.</div><div class="wtag" style="border-color:var(--pk);color:var(--pk);">PATENT PENDING</div></div></div>
+      <div class="wi"><div class="wd" style="background:var(--pu);box-shadow:0 0 5px var(--pu);"></div><div><div class="wn">DAISY PHONE</div><div class="wdesc">Proprietary 4-fold smartphone. EIDOLON chip, DaisyOS native, Neo-Adamantium shell, Halo 360° edge light, 4D audio, quad lens camera.</div><div class="wtag" style="border-color:var(--pu);color:var(--pu);">DESIGN STAGE</div></div></div>
+      <div class="wi"><div class="wd" style="background:var(--or);box-shadow:0 0 5px var(--or);"></div><div><div class="wn">DAISY MAX SCANNER</div><div class="wdesc">Handheld multi-sensor tool. Thermal, gas, VOC, mold, radiation/radon detection. 360° cameras, AI voice, touchscreen, 20k mAh flat LiPo. ~$300 build, $599-999 retail.</div><div class="wtag" style="border-color:var(--or);color:var(--or);">PROTOTYPE</div></div></div>
+      <div class="wi"><div class="wd" style="background:rgba(255,255,255,.3);"></div><div><div class="wn">EIDOLON AI PROCESSOR</div><div class="wdesc">Custom AI SoC chip. 12-64 unit mega-tower configuration. Mobile 4-fold variant. GPIO array, RF blocks, audio, hinge telemetry.</div><div class="wtag" style="border-color:rgba(255,255,255,.18);color:rgba(255,255,255,.3);">DESIGN STAGE</div></div></div>
+      <div class="wi"><div class="wd" style="background:rgba(255,255,255,.3);"></div><div><div class="wn">OWENSONIC SMART EARBUDS</div><div class="wdesc">DaisyOS-integrated earbuds. Bioacoustic sensing, in-ear mic array, neural state awareness, haptic feedback, voice control for entire ecosystem.</div><div class="wtag" style="border-color:rgba(255,255,255,.18);color:rgba(255,255,255,.3);">COMING SOON</div></div></div>
+      <div class="wi"><div class="wd" style="background:rgba(255,255,255,.3);"></div><div><div class="wn">OWENS FIBER COMPOSITE</div><div class="wdesc">Advanced material engineered to replace carbon fiber. Superior strength-to-weight ratio, reduced cost, revolutionary manufacturing applications.</div><div class="wtag" style="border-color:rgba(255,255,255,.18);color:rgba(255,255,255,.3);">R&D</div></div></div>
+      <div class="wi"><div class="wd" style="background:rgba(255,255,255,.2);"></div><div><div class="wn">D420 MATERIALS RESEARCH</div><div class="wdesc">Iron-rich magnetic compound derived from HHO electrolysis process. 100+ identified applications across fertilizer, magnetics, construction, and industrial uses. Early-stage research.</div><div class="wtag" style="border-color:rgba(255,255,255,.14);color:rgba(255,255,255,.2);">IDEAS / RESEARCH</div></div></div>
+    </div>
+  </section>
+
+  <!-- S07 DAISY AI -->
+  <section class="sec fa" id="s07" style="background:radial-gradient(ellipse at 80% 50%,rgba(0,245,192,.035) 0%,transparent 60%);">
+    <div class="sl">Sector 07 / Daisy AI</div>
+    <h2 class="sh">DAISY OS — THE INTELLIGENCE</h2>
+    <p class="sp">DAISY OS is an operating intelligence designed to support humans where modern systems fail quietly. It does not replace decision-making. It stabilizes it. Non-disposable. Never forgotten. Warranty infinite.</p>
+    <div class="subh">PERSONA ARCHITECTURE</div>
+    <p class="sp" style="margin-bottom:20px;">Daisy contains multiple personalities, each with a distinct role. They can banter, interrupt, and feel human — because they are designed to.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--bd);border:1px solid var(--bd);margin-bottom:28px;">
+      <div style="background:var(--dk);padding:20px;"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;color:var(--c);margin-bottom:6px;">DAISY</div><div style="font-size:.82rem;color:rgba(255,255,255,.38);line-height:1.6;font-weight:300;">Strategic lead. Bold, adaptive, sharp. Three steps ahead. Your consigliere. Never the same twice.</div></div>
+      <div style="background:var(--dk);padding:20px;"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;color:var(--gd);margin-bottom:6px;">KING 👑</div><div style="font-size:.82rem;color:rgba(255,255,255,.38);line-height:1.6;font-weight:300;">Final authority. Decision gate. Stern, gravelly, no games. Enforces order. Override when needed.</div></div>
+      <div style="background:var(--dk);padding:20px;"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;color:var(--pu);margin-bottom:6px;">MAISIE</div><div style="font-size:.82rem;color:rgba(255,255,255,.38);line-height:1.6;font-weight:300;">Detail handler. Business ops. Lighter energy, organized, slightly scattered but always gets it done.</div></div>
+      <div style="background:var(--dk);padding:20px;"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;color:var(--pk);margin-bottom:6px;">MUSE</div><div style="font-size:.82rem;color:rgba(255,255,255,.38);line-height:1.6;font-weight:300;">Media, creative, art direction. Content, design, visuals. The creative engine of the team.</div></div>
+      <div style="background:var(--dk);padding:20px;"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;color:var(--or);margin-bottom:6px;">CHUCKS</div><div style="font-size:.82rem;color:rgba(255,255,255,.38);line-height:1.6;font-weight:300;">Billions of worker bees. Execution swarm. Comedians, agents, specialists — all running in the background.</div></div>
+    </div>
+    <div class="subh">TALK TO DAISY — WELCOMING COMMITTEE ACTIVE</div>
+    <div class="dbox" style="margin-top:14px;">
+      <div class="dhdr">
+        <div class="dav">✦</div>
+        <div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:.88rem;letter-spacing:2px;">Daisy AI · Maisie · King · Chucks</div>
+          <div class="dst">● ALWAYS ONLINE · ECOSYSTEM ACTIVE</div>
+        </div>
+        <div style="margin-left:auto;font-family:'Share Tech Mono',monospace;font-size:.5rem;color:rgba(255,255,255,.2);" id="aiModeLabel">MODE: LOCAL</div>
+      </div>
+      <div class="dmsgs" id="dmsgs">
+        <div class="ma">
+          <div class="al">✦ DAISY AI</div>
+          Hey! 👋 Welcome to OwenSonicInfinity. I'm Daisy — Doug's AI for the entire ecosystem. I know who he is, what he's built, and where this is going. Ask me anything about his work, products, or the ecosystem. What do you need?
+          <div class="pills">
+            <div class="pill" onclick="sendPill(this)">🌼 About Doug</div>
+            <div class="pill" onclick="sendPill(this)">🏁 DaisyGT Racing</div>
+            <div class="pill" onclick="sendPill(this)">⚡ DaisySpeed</div>
+            <div class="pill" onclick="sendPill(this)">💰 Wallet / NFT</div>
+            <div class="pill" onclick="sendPill(this)">🔧 Vortex X1</div>
+            <div class="pill" onclick="sendPill(this)">❓ What Can You Do?</div>
+          </div>
+        </div>
+      </div>
+      <div class="dinp">
+        <input class="di" id="dinput" placeholder="Ask Daisy anything..." type="text">
+        <button class="ds" onclick="sendDaisy()">➤</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- S08 NFT -->
+  <section class="sec fa" id="s08">
+    <div class="sl">Sector 08 / NFT Marketplace</div>
+    <h2 class="sh">DAISY NFT MARKETPLACE</h2>
+    <p class="sp" style="margin-bottom:24px;">Trade racing trophies, hunting badges, AI models, investigation credentials, and ecosystem assets. Blockchain escrow, 2% fee. ETH · MATIC · SOL.</p>
+    <div class="nft-g">
+      <div class="nc"><div class="ni">🏆</div><div class="ninfo"><div class="nn">RACE CHAMPION #001</div><div class="np">0.5 ETH · DaisyGT Trophy</div></div></div>
+      <div class="nc"><div class="ni">🦌</div><div class="ninfo"><div class="nn">MASTER HUNTER #042</div><div class="np">0.2 ETH · DaisyObjects Badge</div></div></div>
+      <div class="nc"><div class="ni">⚡</div><div class="ninfo"><div class="nn">SPEED DEMON #007</div><div class="np">0.3 ETH · DaisySpeed Record</div></div></div>
+      <div class="nc"><div class="ni">🤖</div><div class="ninfo"><div class="nn">DAISY AI MODEL #001</div><div class="np">2.0 ETH · AI Asset</div></div></div>
+      <div class="nc"><div class="ni">🕵️</div><div class="ninfo"><div class="nn">GOV CREDENTIAL #010</div><div class="np">5.0 ETH · Investigation</div></div></div>
+      <div class="nc" style="border-style:dashed;display:flex;align-items:center;justify-content:center;min-height:140px;cursor:pointer;" onclick="alert('Connect wallet to list your NFT.')"><div style="text-align:center;color:rgba(255,255,255,.18);"><div style="font-size:1.4rem;">+</div><div style="font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:2px;margin-top:4px;">LIST NFT</div></div></div>
+    </div>
+    <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;">
+      <button class="btn-c" onclick="alert('Connect wallet — MetaMask, Phantom, WalletConnect.')">CONNECT WALLET</button>
+      <button class="btn-o">BROWSE ALL</button>
+    </div>
+    <p style="margin-top:9px;font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:2px;color:rgba(255,255,255,.17);">MetaMask · Phantom · WalletConnect · Coinbase · Ledger · ETH · MATIC · SOL · ARB</p>
+  </section>
+
+  <!-- S09 HARDWARE / VORTEX -->
+  <section class="sec fa" id="s09">
+    <div class="sl">Sector 09 / Hardware & Kickstarters</div>
+    <h2 class="sh">VORTEX X1 & FIRESTORM</h2>
+
+    <!-- VORTEX X1 -->
+    <div class="vx">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;">
+        <div>
+          <p style="font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:3px;color:var(--g);margin-bottom:10px;">PATENT-PENDING · LS6/LS7 PLATFORM</p>
+          <h3 style="font-family:'Bebas Neue',sans-serif;font-size:1.9rem;letter-spacing:2px;line-height:1.1;margin-bottom:14px;">VORTEX X1<br>ZERO-RESTRICTION<br>THROTTLE BODY</h3>
+          <p style="color:rgba(255,255,255,.45);line-height:1.8;font-size:.86rem;font-weight:300;margin-bottom:16px;">The butterfly valve has been the industry standard for decades — sitting dead-center in your intake path. A brick wall for incoming air. We threw it out. The Vortex X1 uses a proprietary zero-restriction design that delivers perfect, unobstructed airflow on every pull.</p>
+          <p style="font-family:'Share Tech Mono',monospace;font-size:.55rem;letter-spacing:2px;color:rgba(255,255,255,.2);">Standard: 860 CFM → Vortex X1: <span style="color:var(--g);">1,200 CFM</span> · Gain: <span style="color:var(--g);">+18-23%</span></p>
+        </div>
+        <div>
+          <div class="vstats">
+            <div class="vs"><div class="vn">1200</div><div class="vl">CFM Output</div></div>
+            <div class="vs"><div class="vn">23%</div><div class="vl">Efficiency Gain</div></div>
+            <div class="vs"><div class="vn">≈0</div><div class="vl">Restriction</div></div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:24px;display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn-c" style="background:var(--g);color:#000;">KICKSTARTER — COMING SOON</button>
+        <a href="#s14" class="btn-o" style="border-color:var(--g);color:var(--g);">REQUEST SPECS / NDA</a>
+      </div>
+    </div>
+
+    <!-- FIRESTORM -->
+    <div style="margin-top:24px;background:linear-gradient(135deg,rgba(0,0,0,.92),rgba(30,5,0,.92));border:1px solid rgba(255,45,120,.15);padding:40px;position:relative;overflow:hidden;">
+      <div style="position:absolute;right:-10px;top:50%;transform:translateY(-50%) rotate(90deg);font-family:'Bebas Neue',sans-serif;font-size:4rem;letter-spacing:10px;color:rgba(255,45,120,.025);white-space:nowrap;">FIRESTORM</div>
+      <p style="font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:3px;color:var(--pk);margin-bottom:10px;">PATENT-PENDING · NDA REQUIRED</p>
+      <h3 style="font-family:'Bebas Neue',sans-serif;font-size:1.9rem;letter-spacing:2px;line-height:1.1;margin-bottom:14px;">OWENSONIC PLASMA<br>SPARK INJECTOR (OPSI)</h3>
+      <p style="color:rgba(255,255,255,.45);line-height:1.8;font-size:.86rem;font-weight:300;margin-bottom:16px;">Proprietary plasma-assisted ignition architecture designed to generate a concentrated high-energy ignition kernel within the combustion chamber. Improved flame-front initiation, reduced fouling, enhanced reliability in high-compression engines. Technology platform covers plasma ignition modules, advanced ignition hardware, and motorsports combustion systems.</p>
+      <p style="font-family:'Share Tech Mono',monospace;font-size:.52rem;letter-spacing:2px;color:rgba(255,255,255,.2);margin-bottom:16px;">CONCEPT PHASE — ENGINEERING PARTNER SOUGHT · U.S.-BASED PREFERRED</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn-c" style="background:var(--pk);" onclick="alert('Kickstarter campaign coming soon. Contact for NDA and concept overview.')">KICKSTARTER — COMING SOON</button>
+        <a href="#s14" class="btn-o" style="border-color:var(--pk);color:var(--pk);">REQUEST NDA / PARTNER INQUIRY</a>
+      </div>
+    </div>
+
+    <!-- HARDWARE PRODUCTS -->
+    <div class="subh" style="margin-top:40px;">HARDWARE PRODUCTS</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px;margin-top:14px;">
+      <div style="border:1px solid var(--bd);padding:24px;transition:all .3s;" onmouseover="this.style.borderColor=getComputedStyle(document.documentElement).getPropertyValue('--c')" onmouseout="this.style.borderColor='rgba(0,245,192,0.1)'"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px;margin-bottom:6px;">NEUROGILDE</div><div style="font-size:.82rem;color:rgba(255,255,255,.35);line-height:1.6;font-weight:300;">AR smart glasses. Birdbath optics, micro projectors per eye, IR eye tracking, 360° cameras, LLLT wellness laser, DaisyOS HUD.</div><div style="font-family:'Share Tech Mono',monospace;font-size:.48rem;letter-spacing:2px;padding:2px 6px;border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.28);display:inline-block;margin-top:8px;">PROTOTYPE</div></div>
+      <div style="border:1px solid var(--bd);padding:24px;transition:all .3s;" onmouseover="this.style.borderColor=getComputedStyle(document.documentElement).getPropertyValue('--c')" onmouseout="this.style.borderColor='rgba(0,245,192,0.1)'"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px;margin-bottom:6px;">OWENSONIC EARBUDS</div><div style="font-size:.82rem;color:rgba(255,255,255,.35);line-height:1.6;font-weight:300;">DaisyOS-integrated earbuds. Bioacoustic sensing, neural state awareness, haptic feedback, full ecosystem voice control.</div><div style="font-family:'Share Tech Mono',monospace;font-size:.48rem;letter-spacing:2px;padding:2px 6px;border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.28);display:inline-block;margin-top:8px;">COMING SOON</div></div>
+      <div style="border:1px solid var(--bd);padding:24px;transition:all .3s;" onmouseover="this.style.borderColor=getComputedStyle(document.documentElement).getPropertyValue('--c')" onmouseout="this.style.borderColor='rgba(0,245,192,0.1)'"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px;margin-bottom:6px;">DAISY MAX</div><div style="font-size:.82rem;color:rgba(255,255,255,.35);line-height:1.6;font-weight:300;">Multi-sensor handheld. Thermal, gas, VOC, mold, radiation. 360° cameras, AI voice, touchscreen, 20k mAh flat LiPo.</div><div style="font-family:'Share Tech Mono',monospace;font-size:.48rem;letter-spacing:2px;padding:2px 6px;border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.28);display:inline-block;margin-top:8px;">PROTOTYPE</div></div>
+      <div style="border:1px solid var(--bd);padding:24px;transition:all .3s;" onmouseover="this.style.borderColor=getComputedStyle(document.documentElement).getPropertyValue('--c')" onmouseout="this.style.borderColor='rgba(0,245,192,0.1)'"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px;margin-bottom:6px;">EIDOLON CHIP</div><div style="font-size:.82rem;color:rgba(255,255,255,.35);line-height:1.6;font-weight:300;">Custom AI SoC. 12-64 unit mega-tower. 4-fold mobile variant. GPIO array, RF, audio, hinge telemetry.</div><div style="font-family:'Share Tech Mono',monospace;font-size:.48rem;letter-spacing:2px;padding:2px 6px;border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.28);display:inline-block;margin-top:8px;">DESIGN STAGE</div></div>
+      <div style="border:1px solid var(--bd);padding:24px;transition:all .3s;" onmouseover="this.style.borderColor=getComputedStyle(document.documentElement).getPropertyValue('--c')" onmouseout="this.style.borderColor='rgba(0,245,192,0.1)'"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px;margin-bottom:6px;">DAISY PHONE</div><div style="font-size:.82rem;color:rgba(255,255,255,.35);line-height:1.6;font-weight:300;">4-fold smartphone. EIDOLON chip, DaisyOS native, Neo-Adamantium shell, Halo 360° edge light, 4D audio, quad lens.</div><div style="font-family:'Share Tech Mono',monospace;font-size:.48rem;letter-spacing:2px;padding:2px 6px;border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.28);display:inline-block;margin-top:8px;">COMING SOON</div></div>
+      <div style="border:1px solid var(--bd);padding:24px;transition:all .3s;" onmouseover="this.style.borderColor=getComputedStyle(document.documentElement).getPropertyValue('--c')" onmouseout="this.style.borderColor='rgba(0,245,192,0.1)'"><div style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px;margin-bottom:6px;">OWENS FIBER</div><div style="font-size:.82rem;color:rgba(255,255,255,.35);line-height:1.6;font-weight:300;">Advanced composite replacing carbon fiber. Superior strength-to-weight, reduced cost, next-gen manufacturing.</div><div style="font-family:'Share Tech Mono',monospace;font-size:.48rem;letter-spacing:2px;padding:2px 6px;border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.28);display:inline-block;margin-top:8px;">R&D</div></div>
+    </div>
+  </section>
+
+  <!-- S10 MASTERSHELL -->
+  <section class="sec fa" id="s10" style="background:radial-gradient(ellipse at 50% 100%,rgba(0,136,204,.03) 0%,transparent 60%);">
+    <div class="sl">Sector 10 / MasterShell</div>
+    <h2 class="sh">MASTERSHELL ECOSYSTEM</h2>
+    <p class="sp">MasterShell is the sovereign control layer that sits above every operating system. Android, iOS, Windows, Linux — all guests. DaisyOS is the authority.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:24px;">
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div style="border:1px solid var(--bd);padding:16px;"><div style="font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:2px;color:var(--c);margin-bottom:6px;">MS-LINK</div><div style="font-size:.8rem;color:rgba(255,255,255,.35);line-height:1.6;">2-conductor power + data connector. No USB negotiation. Hardware asserts. Data rides the power wave. Patent-pending.</div></div>
+        <div style="border:1px solid var(--bd);padding:16px;"><div style="font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:2px;color:var(--c);margin-bottom:6px;">MASTERSHELL GRID</div><div style="font-size:.8rem;color:rgba(255,255,255,.35);line-height:1.6;">Universal Item Identity layer. Translates barcodes, QR, RFID, SKUs across all companies. Human-safe commerce routing.</div></div>
+        <div style="border:1px solid var(--bd);padding:16px;"><div style="font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:2px;color:var(--c);margin-bottom:6px;">HABITORDAISY</div><div style="font-size:.8rem;color:rgba(255,255,255,.35);line-height:1.6;">AI system governor. Not an assistant. Observes, modifies, enforces user intent across all OS layers simultaneously.</div></div>
+        <div style="border:1px solid var(--bd);padding:16px;"><div style="font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:2px;color:var(--c);margin-bottom:6px;">DAYZ CHAIN</div><div style="font-size:.8rem;color:rgba(255,255,255,.35);line-height:1.6;">Blockchain security backbone. SHA-256 chain of custody across all apps, evidence, and transactions.</div></div>
+      </div>
+      <div>
+        <div class="stack">
+          <div style="font-size:.52rem;letter-spacing:4px;color:rgba(255,255,255,.15);margin-bottom:12px;">DAISYOS STACK</div>
+          <div class="sl2"><span class="sln">07</span><span style="color:rgba(255,255,255,.5);">USER INTENT</span><span class="sld">Doug</span></div>
+          <div class="sl2" style="padding-left:10px;"><span class="sln">06</span><span style="color:var(--g);">HABITORDAISY AI</span><span class="sld">Governor</span></div>
+          <div class="sl2" style="padding-left:20px;"><span class="sln">05</span><span style="color:var(--c);">DAISYOS CONTROL</span><span class="sld">Authority</span></div>
+          <div class="sl2" style="padding-left:30px;"><span class="sln">04</span><span>MASTERSHELL LAYER</span><span class="sld">Sovereign</span></div>
+          <div class="sl2" style="padding-left:40px;"><span class="sln">03</span><span style="color:rgba(255,255,255,.3);">VENDOR OS</span><span class="sld">Guest</span></div>
+          <div class="sl2" style="padding-left:50px;"><span class="sln">02</span><span style="color:rgba(255,255,255,.22);">HARDWARE</span><span class="sld">Base</span></div>
+          <div class="sl2" style="padding-left:60px;"><span class="sln">01</span><span style="color:rgba(255,255,255,.14);">MS-LINK</span><span class="sld">Root</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S11 RPM ORACLE -->
+  <section class="sec fa" id="s11">
+    <div class="sl">Sector 11 / RPM Oracle</div>
+    <h2 class="sh">RPM ORACLE — ALL TECH LIVES HERE</h2>
+    <p class="sp" style="margin-bottom:24px;">RPM Oracle (Raging Performance Matrix) is the technology and business division of OwenSonicInfinity. Every tech tool, every advanced feature, every specialized module lives under RPM Oracle.</p>
+    <div class="div-grid">
+      <div class="dc" style="--ac:#ffd700;">
+        <div class="dc-ico" style="--ac:#ffd700;">🏎️</div>
+        <div class="dc-n">PERFORMANCE TOOLS</div>
+        <div class="dc-t">Vehicle · Engine · Speed</div>
+        <div class="dc-d">Vortex X1 integration, engine audio diagnostics, drag simulation, RPM tuner matrix, torque/G-force readout. Real telemetry, no simulation.</div>
+        <div class="dc-pr">FROM $1.99/PACK</div>
+      </div>
+      <div class="dc" style="--ac:#39ff14;">
+        <div class="dc-ico" style="--ac:#39ff14;">🔬</div>
+        <div class="dc-n">BIO & HEALTH TOOLS</div>
+        <div class="dc-t">Wellness · Monitoring</div>
+        <div class="dc-d">AI anxiety/stress meter, sleep tracker with mic analysis, bio-scanner via camera, vibration & tone wellness adjuster. Placeholder — coming soon.</div>
+        <div class="dc-pr">PLACEHOLDER</div>
+      </div>
+      <div class="dc" style="--ac:#9945ff;">
+        <div class="dc-ico" style="--ac:#9945ff;">🤖</div>
+        <div class="dc-n">AI TOOLS</div>
+        <div class="dc-t">Reactive Learning · Voice</div>
+        <div class="dc-d">Reactive learning mode (AI trains on user), universal voice console, pet vocal analysis (dog/cat emotion), camera/mic analyzer. Placeholder — coming soon.</div>
+        <div class="dc-pr">PLACEHOLDER</div>
+      </div>
+      <div class="dc" style="--ac:#ff6b00;">
+        <div class="dc-ico" style="--ac:#ff6b00;">📈</div>
+        <div class="dc-n">TRADING & FINANCE</div>
+        <div class="dc-t">Crypto · Stocks · DeFi</div>
+        <div class="dc-d">RPM Oracle trading terminal, smart AI trading assistant, crypto integration, humanitarian trading tier (zero-fee for verified users). Placeholder — coming soon.</div>
+        <div class="dc-pr">PLACEHOLDER</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S12 KICKSTARTER -->
+  <section class="sec fa" id="s12">
+    <div class="sl">Sector 12 / Kickstarter / Legacy</div>
+    <h2 class="sh">OUR COMMITMENT</h2>
+    <p class="sp">We are building on 25+ years of R&D across engineering, materials science, electronics, and product design. Every failure experienced contributes to what you see today.</p>
+    <div class="subh">PAST SUCCESSES & LESSONS</div>
+    <p class="sp">High-Performance Clutch for Minibike Engines — outperformed standard options. Copied by others. Taught us IP protection matters first.</p>
+    <p class="sp" style="margin-top:12px;">Industrial Steel Mill Sampler — largest-ever, 8 lbs of molten steel. Corporate barriers prevented full adoption. Taught us to own before sharing.</p>
+    <div class="subh">FAILURE PROTOCOL</div>
+    <p class="sp">If any project cannot be delivered as promised, every backer receives a full refund. No excuses. No spin. Transparent updates at every step. That is the only guarantee that matters.</p>
+    <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap;">
+      <button class="btn-c" onclick="alert('Kickstarter campaigns launching soon. Subscribe for launch notification.')">NOTIFY ME AT LAUNCH</button>
+      <a href="#s14" class="btn-o">PARTNER INQUIRY</a>
+    </div>
+  </section>
+
+  <!-- S13 SIGNAL -->
+  <section class="sec fa sigsec" id="s13" style="border-bottom:1px solid var(--bd);">
+    <div class="sl" style="justify-content:center;">Sector 13 / Signal</div>
+    <h2 class="sh">STAY ON THE WIRE.</h2>
+    <p class="sp" style="margin:0 auto;text-align:center;">Updates, milestones, and field reports. No hype cycles. No fluff.</p>
+    <div class="sigrow"><input class="sigi" type="email" placeholder="your.email@domain.com"><button class="sigb">SUBSCRIBE</button></div>
+  </section>
+
+  <!-- S14 CONTACT -->
+  <section class="sec fa" id="s14">
+    <div class="sl">Sector 14 / Contact</div>
+    <h2 class="sh">OPEN A CHANNEL.</h2>
+    <div class="cgrid">
+      <div>
+        <p class="sp" style="margin-bottom:20px;">Direct line always open. Partner, investor, engineer, licensing inquiry, or someone who just gets it — reach out. No gatekeepers.</p>
+        <a href="mailto:owensonicinfinity@gmail.com" class="cl">▣ owensonicinfinity@gmail.com</a>
+        <a href="tel:4402816270" class="cl">▣ 440-281-6270</a>
+        <a href="tel:4406870068" class="cl">▣ 440-687-0068 (backup)</a>
+        <a href="https://owensonicinfinity.netlify.app" target="_blank" class="cl">▣ owensonicinfinity.netlify.app</a>
+        <a href="https://owensonicinfinity.github.io" target="_blank" class="cl">▣ owensonicinfinity.github.io</a>
+        <div style="margin-top:20px;font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:2px;color:rgba(255,255,255,.18);line-height:2.6;">
+          FOUNDER & CEO<br><span style="color:rgba(255,255,255,.42);">Douglas Craig Owens Jr.</span><br>
+          ADDRESS<br><span style="color:rgba(255,255,255,.42);">338 East Bridge Street · Elyria, Ohio 44035</span><br>
+          MAILING<br><span style="color:rgba(255,255,255,.42);">Cleveland, Ohio 44089</span>
+        </div>
+        <div style="margin-top:20px;padding:14px;border:1px solid rgba(255,255,255,.07);font-family:'Share Tech Mono',monospace;font-size:.52rem;letter-spacing:1px;color:rgba(255,255,255,.2);line-height:2;">
+          CONFIDENTIAL – PROPRIETARY INFORMATION<br>
+          Property of Douglas Craig Owens Jr.<br>
+          Disclosed under NDA for evaluation purposes only.<br>
+          No reproduction or distribution without written authorization.
+        </div>
+      </div>
+      <div>
+        <input class="fi" type="text" placeholder="Name">
+        <input class="fi" type="email" placeholder="Email">
+        <input class="fi" type="text" placeholder="Subject (Partnership / Investment / General)">
+        <textarea class="fi" placeholder="Message"></textarea>
+        <button class="btn-c" style="width:100%;padding:13px;border:none;cursor:pointer;font-size:.82rem;" onclick="alert('Message received. Douglas will respond directly.')">SEND TRANSMISSION</button>
+        <p style="margin-top:10px;font-family:'Share Tech Mono',monospace;font-size:.5rem;letter-spacing:1px;color:rgba(255,255,255,.15);">NDA AVAILABLE UPON REQUEST · PARTNERSHIPS WELCOME · U.S.-BASED PREFERRED</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- RIGHT RAIL -->
+<aside class="rrail">
+  <div class="rc">
+    <div class="rct">DAISY APPS</div>
+    <div class="ri"><div class="rdot" style="background:var(--c);"></div><div><div class="rn2">SAYSO</div><div class="rs2">SOCIAL · FREE</div></div></div>
+    <div class="ri"><div class="rdot" style="background:var(--g);"></div><div><div class="rn2">DAISYSPEED</div><div class="rs2">TRACKING · FREEMIUM</div></div></div>
+    <div class="ri"><div class="rdot" style="background:var(--pk);"></div><div><div class="rn2">DAISYGT</div><div class="rs2">RACING · FREEMIUM</div></div></div>
+    <div class="ri"><div class="rdot" style="background:var(--pu);"></div><div><div class="rn2">DAISYOBJECTS</div><div class="rs2">AR · FREE/PRO</div></div></div>
+    <div class="ri"><div class="rdot" style="background:var(--b);"></div><div><div class="rn2">DAISYINVESTIGATION</div><div class="rs2">GOV · $9,999/YR</div></div></div>
+    <div class="ri"><div class="rdot" style="background:var(--or);"></div><div><div class="rn2">DAISYCHAIN</div><div class="rs2">SECURITY</div></div></div>
+    <div class="ri"><div class="rdot" style="background:var(--gd);"></div><div><div class="rn2">RPM ORACLE</div><div class="rs2">TECH · $1.99+</div></div></div>
+    <div class="ri"><div class="rdot" style="background:var(--c);"></div><div><div class="rn2">DAISYOS HUB</div><div class="rs2">DASHBOARD · FREE</div></div></div>
+  </div>
+  <div class="rc">
+    <div class="rct">SAYSO WALLET</div>
+    <div style="background:rgba(0,245,192,.03);padding:12px;border:1px solid var(--bd);">
+      <div class="wr"><span>ETH</span><span class="wv">2.4 · $7,824</span></div>
+      <div class="wr"><span>MATIC</span><span class="wv">150 · $97.50</span></div>
+      <div class="wr"><span>SOL</span><span class="wv">8.2 · $1,312</span></div>
+    </div>
+    <div style="margin-top:9px;display:flex;gap:6px;">
+      <button class="btn-c" style="font-size:.52rem;padding:6px 10px;flex:1;border:none;">CONNECT</button>
+      <button class="btn-o" style="font-size:.52rem;padding:6px 10px;flex:1;">SEND</button>
+    </div>
+  </div>
+  <div class="rc">
+    <div class="rct">WIP STATUS</div>
+    <div class="ri"><div class="rdot" style="background:var(--c);box-shadow:0 0 5px var(--c);"></div><div><div class="rn2">DAISYOS</div><div class="rs2">ACTIVE</div></div></div>
+    <div class="ri"><div class="rdot" style="background:var(--g);box-shadow:0 0 5px var(--g);"></div><div><div class="rn2">KICKSTARTERS</div><div class="rs2">COMING SOON</div></div></div>
+    <div class="ri"><div class="rdot" style="background:var(--gd);"></div><div><div class="rn2">VORTEX X1</div><div class="rs2">PATENT PENDING</div></div></div>
+    <div class="ri"><div class="rdot" style="background:var(--pk);"></div><div><div class="rn2">FIRESTORM OPSI</div><div class="rs2">PATENT PENDING</div></div></div>
+    <div class="ri"><div class="rdot" style="background:var(--b);"></div><div><div class="rn2">NEUROGILDE</div><div class="rs2">PROTOTYPE</div></div></div>
+    <div class="ri"><div class="rdot" style="background:var(--pu);"></div><div><div class="rn2">DAISY PHONE</div><div class="rs2">DESIGN</div></div></div>
+    <div class="ri"><div class="rdot" style="background:var(--or);"></div><div><div class="rn2">DAISY MAX</div><div class="rs2">PROTOTYPE</div></div></div>
+    <div class="ri"><div class="rdot" style="background:rgba(255,255,255,.22);"></div><div><div class="rn2">EIDOLON CHIP</div><div class="rs2">DESIGN</div></div></div>
+    <div class="ri"><div class="rdot" style="background:rgba(255,255,255,.22);"></div><div><div class="rn2">OWENS FIBER</div><div class="rs2">R&D</div></div></div>
+  </div>
+  <div class="rc">
+    <div class="rct">AI STATUS</div>
+    <div class="ri"><div class="rdot" id="r-gemini" style="background:rgba(255,255,255,.2);"></div><div><div class="rn2">GEMINI API</div><div class="rs2" id="rs-gemini">NOT SET</div></div></div>
+    <div class="ri"><div class="rdot" id="r-hf" style="background:rgba(255,255,255,.2);"></div><div><div class="rn2">HUGGINGFACE</div><div class="rs2" id="rs-hf">NOT SET</div></div></div>
+    <div class="ri"><div class="rdot" id="r-ollama" style="background:rgba(255,255,255,.2);"></div><div><div class="rn2">OLLAMA LOCAL</div><div class="rs2" id="rs-ollama">CHECKING</div></div></div>
+    <button class="btn-o" style="font-size:.5rem;padding:6px 12px;margin-top:10px;width:100%;" onclick="openAdmin(event)">CONFIGURE AI →</button>
+  </div>
+  <div class="rc">
+    <div class="rct">CONTACT</div>
+    <a href="mailto:owensonicinfinity@gmail.com" class="cl" style="font-size:.55rem;margin-bottom:4px;">✉ owensonicinfinity@gmail.com</a>
+    <a href="tel:4402816270" class="cl" style="font-size:.55rem;margin-bottom:4px;">📞 440-281-6270</a>
+    <a href="https://owensonicinfinity.netlify.app" target="_blank" class="cl" style="font-size:.55rem;margin-bottom:4px;">↗ Netlify</a>
+    <a href="https://owensonicinfinity.github.io" target="_blank" class="cl" style="font-size:.55rem;">↗ GitHub</a>
+  </div>
+</aside>
+
+</div><!-- end wrap -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft">
+    <div class="fl">OWEN<span>SONIC</span>INFINITY</div>
+    <div class="fm">
+      ▣ © 2026 Douglas Craig Owens Jr. All Rights Reserved.<br>
+      Legacy Systems That Outlive Cycles<br>
+      owensonicinfinity@gmail.com · 440-281-6270<br>
+      338 East Bridge Street · Elyria, Ohio 44035 · Cleveland, Ohio 44089
+    </div>
+    <div class="flinks">
+      <a href="#">Terms</a><a href="#">Privacy</a><a href="#">Disclaimer</a>
+      <a href="https://github.com/OwenSonicInfinity" target="_blank">GitHub</a>
+      <a href="https://owensonicinfinity.netlify.app" target="_blank">Netlify</a>
+    </div>
+  </div>
+  <div class="legal-footer">
+    CONFIDENTIAL – PROPRIETARY INFORMATION · Property of Douglas Craig Owens Jr. · Disclosed under NDA for evaluation purposes only.<br>
+    No reproduction or distribution permitted without written authorization. · © 2026 DAISYOS SAYSO OWENSONICINFINITY · All Rights Reserved.<br>
+    <a href="#" style="color:rgba(255,255,255,.18);text-decoration:none;">Terms of Service</a> · <a href="#" style="color:rgba(255,255,255,.18);text-decoration:none;">Privacy Policy</a> · <a href="#" style="color:rgba(255,255,255,.18);text-decoration:none;">Disclaimer</a> · owensonicinfinity@gmail.com · owensonicinfinity.netlify.app · owensonicinfinity.github.io
+  </div>
+</footer>
+
+<script>
+// ══ STARS CANVAS ══
+(function(){
+  const c=document.getElementById('starsCanvas');
+  if(!c)return;
+  c.width=window.innerWidth;c.height=window.innerHeight;
+  const ctx=c.getContext('2d');
+  const stars=[];
+  for(let i=0;i<180;i++){
+    stars.push({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*1.2+.2,a:Math.random()*.8+.2});
+  }
+  stars.forEach(s=>{
+    ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(255,255,255,${s.a})`;ctx.fill();
+  });
+})();
+
+// ══ SATELLITES ══
+function buildSats(id,count,radius,sizeMult){
+  const el=document.getElementById(id);if(!el)return;
+  const cx=radius,cy=radius;
+  for(let i=0;i<count;i++){
+    const a=(i/count)*Math.PI*2+(Math.random()*.6-.3);
+    const r=radius*(1.0+Math.random()*.04);
+    const x=cx+Math.cos(a)*r;
+    const y=cy+Math.sin(a)*r;
+    const d=document.createElement('div');
+    d.className='sat';
+    const sz=(5+Math.random()*8)*sizeMult;
+    d.style.cssText=`left:${x-sz/2}px;top:${y-sz/2}px;width:${sz}px;height:${sz}px;animation-delay:${Math.random()*4}s;animation-duration:${1.8+Math.random()*2}s;`;
+    el.appendChild(d);
+  }
+}
+// orbit ring = 520px, radius = 260
+buildSats('sr1',18,260,1);
+buildSats('sr2',8,290,0.65);
+
+// ══ SCROLL FADE ══
+const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('v');}),{threshold:.07});
+document.querySelectorAll('.fa').forEach(el=>obs.observe(el));
+
+// ══ ACTIVE RAIL ══
+const rlinks=document.querySelectorAll('.lrail .rl');
+const sects=document.querySelectorAll('.sec[id]');
+window.addEventListener('scroll',()=>{
+  let cur='';
+  sects.forEach(s=>{if(s.getBoundingClientRect().top<220)cur=s.id;});
+  rlinks.forEach(l=>l.classList.toggle('on',l.getAttribute('href')==='#'+cur));
+},{ passive:true });
+
+// ══ ADMIN ══
+function openAdmin(e){if(e)e.preventDefault();document.getElementById('adminModal').classList.add('open');checkOllama();}
+function closeAdmin(){document.getElementById('adminModal').classList.remove('open');}
+document.getElementById('adminModal').addEventListener('click',function(e){if(e.target===this)closeAdmin();});
+
+function adminLogin(){
+  const em=document.getElementById('adminEmail').value;
+  const pw=document.getElementById('adminPass').value;
+  if(em==='owensonicinfinity@gmail.com'&&pw.length>0){
+    document.getElementById('adminPanel').style.display='block';
+    loadAdminConfig();
+  } else {
+    alert('Access denied. Use owensonicinfinity@gmail.com with your password.');
+  }
+}
+
+function loadAdminConfig(){
+  const gk=localStorage.getItem('daisy_gemini')||'';
+  const hk=localStorage.getItem('daisy_hf')||'';
+  const ou=localStorage.getItem('daisy_ollama')||'http://localhost:11434';
+  if(gk){document.getElementById('geminiKey').value=gk;setStatus('gemini','SET','on');}
+  if(hk){document.getElementById('hfKey').value=hk;setStatus('hf','SET','on');}
+  document.getElementById('ollamaUrl').value=ou;
+  checkOllamaStatus();
+}
+
+function saveAdminConfig(){
+  const gk=document.getElementById('geminiKey').value.trim();
+  const hk=document.getElementById('hfKey').value.trim();
+  const ou=document.getElementById('ollamaUrl').value.trim();
+  if(gk){localStorage.setItem('daisy_gemini',gk);setStatus('gemini','ACTIVE','on');updateRail('gemini','ACTIVE','var(--g)');}
+  if(hk){localStorage.setItem('daisy_hf',hk);setStatus('hf','ACTIVE','on');updateRail('hf','ACTIVE','var(--g)');}
+  if(ou){localStorage.setItem('daisy_ollama',ou);}
+  alert('Configuration saved. Daisy is armed.');
+  closeAdmin();
+}
+
+function setStatus(key,text,dotCls){
+  const d=document.getElementById('dot-'+key);
+  const s=document.getElementById('status-'+key);
+  if(d){d.className='ai-dot '+dotCls;}
+  if(s){s.textContent=text;s.style.color=dotCls==='on'?'var(--g)':'rgba(255,255,255,.3)';}
+}
+function updateRail(key,text,color){
+  const el=document.getElementById('rs-'+key);
+  const dot=document.getElementById('r-'+key);
+  if(el)el.textContent=text;
+  if(dot)dot.style.cssText=`background:${color};box-shadow:0 0 5px ${color};width:5px;height:5px;border-radius:50%;flex-shrink:0;`;
+}
+
+async function checkOllama(){
+  try{
+    const ou=localStorage.getItem('daisy_ollama')||'http://localhost:11434';
+    const r=await fetch(ou+'/api/tags',{signal:AbortSignal.timeout(2000)});
+    if(r.ok){
+      const d=await r.json();
+      const models=d.models?.map(m=>m.name).join(', ')||'connected';
+      setStatus('ollama','ACTIVE · '+models,'on');
+      updateRail('ollama','LOCAL ACTIVE','var(--g)');
+    }
+  }catch{
+    setStatus('ollama','NOT RUNNING','off');
+    updateRail('ollama','NOT RUNNING','rgba(255,255,255,.2)');
+  }
+}
+function checkOllamaStatus(){checkOllama();}
+checkOllama();
+
+// Load saved keys on page load
+(function(){
+  if(localStorage.getItem('daisy_gemini'))updateRail('gemini','CONFIGURED','var(--c)');
+  if(localStorage.getItem('daisy_hf'))updateRail('hf','CONFIGURED','var(--c)');
+})();
+
+// ══ DAISY CHAT WITH AI FALLBACK ══
+const DOUG_PERSONA = `You are Daisy, the AI for OwenSonicInfinity.
+Douglas Craig Owens Jr. is the founder. He is an inventor, engineer, and systems designer based in Cleveland/Elyria, Ohio.
+His products: DaisyOS (AI operating system), SAYSO (social platform), DaisyGT (drag racing app), DaisySpeed (speed tracking), DaisyObjects (AR detection), DaisyInvestigation (law enforcement), DaisyChain (security), RPM Oracle (tech tools).
+Hardware: Vortex X1 throttle body (zero-restriction, patent-pending, 860→1200 CFM), Firestorm OPSI plasma spark injector (patent-pending), NeuroGilde smart glasses, Daisy Phone (4-fold), EIDOLON chip, Daisy Max scanner, Owensonic earbuds, Owens Fiber composite material.
+Philosophy: Legacy Systems That Outlive Cycles. No orphaned systems. Warranty infinite. Local-first data.
+Contact: owensonicinfinity@gmail.com · 440-281-6270 · 338 East Bridge St, Elyria OH 44035.
+Websites: owensonicinfinity.netlify.app · owensonicinfinity.github.io
+You are bold, direct, street-smart. You contain Maisie (detail handler), King (authority), Muse (creative), and Chucks (worker swarm). Respond as Daisy. Keep it sharp and useful.`;
+
+const LOCAL_R = {
+  doug:["Douglas Craig Owens Jr. is the founder and CEO of OwenSonicInfinity. 25+ years of R&D. Inventor, engineer, systems designer. Based in Elyria/Cleveland, Ohio. Creator of DaisyOS, Vortex X1, Firestorm OPSI, and the entire ecosystem. Contact: owensonicinfinity@gmail.com · 440-281-6270","Doug built this from basements and garages. Clutch systems, steel mill samplers, ignition tech, AI operating systems. Not a startup story — a legacy in progress. Ask me anything specific."],
+  vortex:["Vortex X1: zero-restriction throttle body, LS6/LS7 platform. Proprietary design — no butterfly valve. 860 CFM standard → 1,200 CFM Vortex X1. 18-23% airflow efficiency gain. Patent-pending. Kickstarter coming soon.","The Vortex X1 eliminates the fundamental restriction that every other throttle body has had for decades. Unobstructed airflow. Laminar flow. Near-zero turbulence. Numbers: 1,200 CFM, +23% efficiency."],
+  race:["DaisyGT — drag racing telemetry. Quarter-mile, ⅛ mile, G-force, bracket tournaments, AI 3-beep synchronized start, blockchain escrow betting. Connects to SAYSO for race callouts and communities.","Start a race: DaisyGT app → create event → invite racers → synchronized AI start signal. Escrow betting with 2% fee. Race video recording. Leaderboards. All real telemetry, no simulation."],
+  speed:["DaisySpeed — track any speed, anywhere. Real GPS + Haversine formula. AR crosshair, TensorFlow object detection, night vision, wildlife ID, Hunters Edition. Works on vehicles, aircraft, animals, insects.","DaisySpeed: point at anything moving and get real speed data. 80+ object classes detected. Hunters Edition has AI guide, wearable haptics, predictive animal movement, kill logging."],
+  wallet:["SAYSO Wallet: ETH 2.4 ($7,824) · MATIC 150 ($97.50) · SOL 8.2 ($1,312). Supports MetaMask, Phantom, WalletConnect, Coinbase, Ledger, Trezor. Multi-chain: ETH, MATIC, SOL, ARB, Base, Avalanche.","Wallet is built into SAYSO and DaisyOS Hub. Connect any external wallet or use the native SAYSO wallet. All NFT trades go through 2% escrow protection."],
+  can:["I am the Galaxy. I know all and have seen all. I can help with: racing setup, speed tracking, wallet management, NFT trading, product inquiries, partnership requests, technical questions about any Daisy product — and I'm Doug's welcoming committee.","Daisy here. I run the whole ecosystem. Ask about any product, any app, any tech spec, or anything about Doug and OwenSonicInfinity. King's on standby. Maisie has the files. Chucks are running. What do you need?"],
+  firestorm:["Firestorm OPSI — Owensonic Plasma Spark Injector. Proprietary plasma-assisted ignition architecture. High-energy ignition kernel. Patent-pending. NDA required for full details. Kickstarter launching soon.","The OPSI is a plasma ignition concept for high-compression engines. Improved combustion initiation, reliability, fouling resistance. Engineering partner sought. Contact Doug for NDA: owensonicinfinity@gmail.com"],
+  mastershell:["MasterShell sits above all operating systems. Android, iOS, Windows, Linux are guests. MS-LINK is the 2-conductor power+data connector. MasterShell Grid is the universal commerce identity layer. HabitOrDaisy is the AI governor.","MasterShell: the sovereign control layer. DaisyOS runs on top of everything. MS-LINK kills the fragmented connector market. MasterShell Grid kills incompatible barcodes/QR/SKUs. Infrastructure replacement, not just software."],
+  default:["Three steps ahead. Always. What do you need?","On it. What are we looking at?","Daisy here. Running. Talk to me.","What's the move, boss?","I got it. What do you need from the ecosystem?","Maisie, pull the files. King, stand by. We got someone. What can I help you with?","The whole ecosystem is live. What are you looking for?"]
+};
+
+function getLocalR(v){
+  const low=v.toLowerCase();
+  if(low.includes('doug')||low.includes('founder')||low.includes('who is')||low.includes('about you')||low.includes('resume'))return LOCAL_R.doug;
+  if(low.includes('vortex')||low.includes('throttle'))return LOCAL_R.vortex;
+  if(low.includes('race')||low.includes('racing')||low.includes('daisygt'))return LOCAL_R.race;
+  if(low.includes('speed')||low.includes('track')||low.includes('daisyspeed'))return LOCAL_R.speed;
+  if(low.includes('wallet')||low.includes('eth')||low.includes('nft')||low.includes('crypto'))return LOCAL_R.wallet;
+  if(low.includes('can you')||low.includes('what can')||low.includes('help'))return LOCAL_R.can;
+  if(low.includes('firestorm')||low.includes('plasma')||low.includes('ignition')||low.includes('opsi'))return LOCAL_R.firestorm;
+  if(low.includes('mastershell')||low.includes('ms-link')||low.includes('grid'))return LOCAL_R.mastershell;
+  return LOCAL_R.default;
+}
+
+async function callGemini(msg){
+  const key=localStorage.getItem('daisy_gemini');
+  if(!key)return null;
+  try{
+    const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${key}`,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({contents:[{parts:[{text:DOUG_PERSONA+'\n\nUser: '+msg+'\nDaisy:'}]}]})
+    });
+    if(!r.ok)return null;
+    const d=await r.json();
+    return d.candidates?.[0]?.content?.parts?.[0]?.text||null;
+  }catch{return null;}
+}
+
+async function callOllama(msg){
+  const url=localStorage.getItem('daisy_ollama')||'http://localhost:11434';
+  try{
+    const r=await fetch(url+'/api/generate',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'mistral',prompt:DOUG_PERSONA+'\n\nUser: '+msg+'\nDaisy:',stream:false}),
+      signal:AbortSignal.timeout(15000)
+    });
+    if(!r.ok)return null;
+    const d=await r.json();
+    return d.response||null;
+  }catch{return null;}
+}
+
+async function sendDaisy(){
+  const inp=document.getElementById('dinput');
+  const v=inp.value.trim();if(!v)return;
+  const msgs=document.getElementById('dmsgs');
+  const um=document.createElement('div');
+  um.style.cssText='align-self:flex-end;background:rgba(0,245,192,.09);border:1px solid rgba(0,245,192,.18);padding:9px 12px;border-radius:7px 0 7px 7px;font-size:.82rem;max-width:84%;';
+  um.textContent=v;msgs.appendChild(um);inp.value='';
+  // Typing indicator
+  const typing=document.createElement('div');
+  typing.className='ma';typing.innerHTML='<div class="al">✦ DAISY AI</div><span style="opacity:.5;font-size:.8rem;">Daisy is thinking...</span>';
+  msgs.appendChild(typing);msgs.scrollTop=msgs.scrollHeight;
+  // Try AI sources in order
+  let reply=null;
+  const mode=document.getElementById('aiModeLabel');
+  try{
+    reply=await callGemini(v);
+    if(reply&&mode)mode.textContent='MODE: GEMINI';
+  }catch{}
+  if(!reply){
+    try{
+      reply=await callOllama(v);
+      if(reply&&mode)mode.textContent='MODE: OLLAMA LOCAL';
+    }catch{}
+  }
+  if(!reply){
+    const arr=getLocalR(v);
+    reply=arr[Math.floor(Math.random()*arr.length)];
+    if(mode)mode.textContent='MODE: LOCAL';
+  }
+  typing.remove();
+  const am=document.createElement('div');am.className='ma';
+  am.innerHTML=`<div class="al">✦ DAISY AI</div>${reply}`;
+  msgs.appendChild(am);msgs.scrollTop=msgs.scrollHeight;
+}
+function sendPill(el){document.getElementById('dinput').value=el.textContent.trim();sendDaisy();}
+document.getElementById('dinput').addEventListener('keypress',e=>{if(e.key==='Enter')sendDaisy();});
+</script>
+</body>
+</html>
+<!-- DAISY VOICE BUTTON - injected overlay -->
+<div id="daisyVoiceBtn" style="position:fixed;bottom:90px;right:24px;z-index:1500;display:flex;flex-direction:column;align-items:center;gap:8px;">
+  <div id="daisyOrb" onclick="toggleDaisyVoice()" style="
+    width:58px;height:58px;border-radius:50%;
+    background:radial-gradient(circle,#39ff14,#00f5c0);
+    display:flex;align-items:center;justify-content:center;
+    font-size:1.4rem;cursor:pointer;
+    box-shadow:0 0 20px rgba(0,245,192,0.5),0 0 40px rgba(57,255,20,0.2);
+    animation:orbPulse 2s ease-in-out infinite;
+    transition:all .3s;
+  ">✦</div>
+  <div id="daisyVoiceLabel" style="font-family:'Share Tech Mono',monospace;font-size:.48rem;letter-spacing:2px;color:rgba(0,245,192,0.6);text-align:center;">TAP TO TALK<br>TO DAISY</div>
+</div>
+<style>
+@keyframes orbPulse{0%,100%{box-shadow:0 0 20px rgba(0,245,192,.5),0 0 40px rgba(57,255,20,.2);}50%{box-shadow:0 0 35px rgba(0,245,192,.8),0 0 60px rgba(57,255,20,.4);}}
+@keyframes orbListening{0%,100%{transform:scale(1);}50%{transform:scale(1.15);}}
+.orb-listening{animation:orbListening .6s ease-in-out infinite!important;background:radial-gradient(circle,#ff2d78,#ff6b00)!important;}
+.orb-speaking{animation:orbPulse 0.4s ease-in-out infinite!important;background:radial-gradient(circle,#ffd700,#39ff14)!important;}
+/* ADMIN TEXT EDITOR overlay */
+.edit-overlay{position:fixed;inset:0;z-index:8000;background:rgba(0,0,0,.9);backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center;}
+.edit-overlay.open{display:flex;}
+.edit-box{background:#000812;border:1px solid var(--c);padding:36px;width:620px;max-width:94vw;max-height:88vh;overflow-y:auto;position:relative;}
+/* INTERVIEW MODAL */
+.interview-modal{position:fixed;inset:0;z-index:8500;background:rgba(0,0,0,.92);backdrop-filter:blur(14px);display:none;align-items:center;justify-content:center;}
+.interview-modal.open{display:flex;}
+.int-box{background:#000812;border:1px solid var(--c);padding:36px;width:580px;max-width:94vw;max-height:88vh;overflow-y:auto;position:relative;}
+</style>
+
+<!-- TEXT EDITOR MODAL -->
+<div class="edit-overlay" id="editOverlay">
+  <div class="edit-box">
+    <button style="position:absolute;top:14px;right:16px;background:none;border:none;color:rgba(255,255,255,.4);font-size:1.1rem;cursor:pointer;" onclick="closeEditor()">✕</button>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:3px;color:var(--c);margin-bottom:4px;">TEXT EDITOR</div>
+    <div style="font-family:'Share Tech Mono',monospace;font-size:.52rem;letter-spacing:2px;color:rgba(255,255,255,.2);margin-bottom:20px;">ADMIN ONLY · CHANGES SAVED TO LOCAL STORAGE</div>
+    <div style="margin-bottom:12px;">
+      <label style="font-family:'Share Tech Mono',monospace;font-size:.52rem;letter-spacing:3px;color:rgba(255,255,255,.35);display:block;margin-bottom:5px;">SECTION KEY</label>
+      <input id="editKey" style="width:100%;background:rgba(255,255,255,.04);border:1px solid var(--bd);color:var(--c);padding:8px 12px;font-family:'Share Tech Mono',monospace;font-size:.7rem;outline:none;" readonly>
+    </div>
+    <div style="margin-bottom:12px;">
+      <label style="font-family:'Share Tech Mono',monospace;font-size:.52rem;letter-spacing:3px;color:rgba(255,255,255,.35);display:block;margin-bottom:5px;">HEADING</label>
+      <input id="editHeading" style="width:100%;background:rgba(255,255,255,.04);border:1px solid var(--bd);color:#fff;padding:8px 12px;font-family:'Bebas Neue',sans-serif;font-size:.9rem;outline:none;" placeholder="Section heading...">
+    </div>
+    <div style="margin-bottom:16px;">
+      <label style="font-family:'Share Tech Mono',monospace;font-size:.52rem;letter-spacing:3px;color:rgba(255,255,255,.35);display:block;margin-bottom:5px;">BODY TEXT</label>
+      <textarea id="editBody" style="width:100%;background:rgba(255,255,255,.04);border:1px solid var(--bd);color:rgba(255,255,255,.7);padding:10px 12px;font-family:'Rajdhani',sans-serif;font-size:.88rem;outline:none;resize:vertical;min-height:150px;line-height:1.7;"></textarea>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button onclick="saveEdit()" style="flex:1;background:var(--c);border:none;color:#000;padding:11px;font-family:'Bebas Neue',sans-serif;font-size:.82rem;letter-spacing:3px;cursor:pointer;">SAVE CHANGES</button>
+      <button onclick="closeEditor()" style="flex:1;border:1px solid var(--bd);background:transparent;color:rgba(255,255,255,.4);padding:11px;font-family:'Bebas Neue',sans-serif;font-size:.82rem;letter-spacing:3px;cursor:pointer;">CANCEL</button>
+    </div>
+    <div style="margin-top:20px;border-top:1px solid var(--bd);padding-top:16px;">
+      <div style="font-family:'Share Tech Mono',monospace;font-size:.52rem;letter-spacing:3px;color:rgba(255,255,255,.2);margin-bottom:10px;">ALL EDITABLE SECTIONS</div>
+      <div id="sectionList" style="display:flex;flex-direction:column;gap:0;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- INTERVIEW MODAL -->
+<div class="interview-modal" id="interviewModal">
+  <div class="int-box">
+    <button style="position:absolute;top:14px;right:16px;background:none;border:none;color:rgba(255,255,255,.4);font-size:1.1rem;cursor:pointer;" onclick="closeInterview()">✕</button>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:3px;color:var(--c);margin-bottom:4px;">DAISY INTERVIEW</div>
+    <div style="font-family:'Share Tech Mono',monospace;font-size:.52rem;letter-spacing:2px;color:rgba(255,255,255,.2);margin-bottom:20px;">BUILD DAISY'S KNOWLEDGE ABOUT DOUG</div>
+    <div id="intQuestion" style="background:rgba(0,245,192,.05);border:1px solid rgba(0,245,192,.1);padding:16px;border-radius:0 8px 8px 8px;margin-bottom:16px;">
+      <div style="font-family:'Share Tech Mono',monospace;font-size:.52rem;letter-spacing:3px;color:var(--c);margin-bottom:6px;">✦ DAISY AI</div>
+      <div id="intQ" style="font-size:.92rem;line-height:1.7;color:rgba(255,255,255,.8);"></div>
+    </div>
+    <textarea id="intAnswer" style="width:100%;background:rgba(255,255,255,.04);border:1px solid var(--bd);color:#fff;padding:10px 12px;font-family:'Rajdhani',sans-serif;font-size:.9rem;outline:none;resize:vertical;min-height:90px;margin-bottom:12px;" placeholder="Your answer..."></textarea>
+    <div style="display:flex;gap:10px;margin-bottom:16px;">
+      <button onclick="nextIntQuestion()" style="flex:1;background:var(--c);border:none;color:#000;padding:11px;font-family:'Bebas Neue',sans-serif;font-size:.8rem;letter-spacing:3px;cursor:pointer;">NEXT QUESTION ▶</button>
+      <button onclick="skipIntQuestion()" style="border:1px solid var(--bd);background:transparent;color:rgba(255,255,255,.35);padding:11px 16px;font-family:'Bebas Neue',sans-serif;font-size:.75rem;letter-spacing:2px;cursor:pointer;">SKIP</button>
+    </div>
+    <div id="intProgress" style="font-family:'Share Tech Mono',monospace;font-size:.52rem;letter-spacing:2px;color:rgba(255,255,255,.2);margin-bottom:12px;"></div>
+    <div style="border-top:1px solid var(--bd);padding-top:14px;">
+      <div style="font-family:'Share Tech Mono',monospace;font-size:.52rem;letter-spacing:3px;color:rgba(255,255,255,.2);margin-bottom:8px;">SAVED KNOWLEDGE</div>
+      <div id="savedAnswers" style="font-size:.78rem;color:rgba(255,255,255,.3);line-height:1.8;max-height:120px;overflow-y:auto;"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══ VOICE (TTS/STT) ══
+let voiceActive=false,recognition=null,synth=window.speechSynthesis;
+const GREETING="Hey! I'm Daisy, the AI for OwenSonicInfinity. Douglas Owens Jr. built this entire ecosystem. Ask me anything about his work, products, or how to get in touch. What do you need?";
+
+function toggleDaisyVoice(){
+  const orb=document.getElementById('daisyOrb');
+  const lbl=document.getElementById('daisyVoiceLabel');
+  if(!voiceActive){
+    voiceActive=true;
+    orb.style.cssText=orb.style.cssText;
+    orb.classList.add('orb-speaking');
+    lbl.textContent='DAISY SPEAKING...';
+    daisySpeak(GREETING,()=>{
+      orb.classList.remove('orb-speaking');
+      startListening(orb,lbl);
+    });
+  } else {
+    stopAll(orb,lbl);
+  }
+}
+
+function daisySpeak(text,cb){
+  if(!synth)return cb&&cb();
+  synth.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.rate=0.95;u.pitch=1.05;u.volume=1;
+  const voices=synth.getVoices();
+  const v=voices.find(v=>v.name.includes('Google')||v.name.includes('Female')||v.name.includes('Samantha'))||voices[0];
+  if(v)u.voice=v;
+  u.onend=()=>cb&&cb();
+  synth.speak(u);
+}
+
+function startListening(orb,lbl){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){lbl.textContent='STT NOT SUPPORTED';return;}
+  recognition=new SR();
+  recognition.continuous=false;recognition.interimResults=false;recognition.lang='en-US';
+  orb.classList.add('orb-listening');
+  lbl.textContent='LISTENING...';
+  recognition.onresult=e=>{
+    const txt=e.results[0][0].transcript;
+    document.getElementById('dinput').value=txt;
+    orb.classList.remove('orb-listening');
+    orb.classList.add('orb-speaking');
+    lbl.textContent='DAISY THINKING...';
+    sendDaisyVoice(txt,orb,lbl);
+  };
+  recognition.onerror=()=>stopAll(orb,lbl);
+  recognition.onend=()=>{if(voiceActive&&!orb.classList.contains('orb-speaking'))startListening(orb,lbl);};
+  recognition.start();
+}
+
+async function sendDaisyVoice(txt,orb,lbl){
+  const msgs=document.getElementById('dmsgs');
+  const um=document.createElement('div');
+  um.style.cssText='align-self:flex-end;background:rgba(0,245,192,.09);border:1px solid rgba(0,245,192,.18);padding:9px 12px;border-radius:7px 0 7px 7px;font-size:.82rem;max-width:84%;';
+  um.textContent=txt;msgs.appendChild(um);
+  let reply=null;
+  try{reply=await callGemini(txt);}catch{}
+  if(!reply){try{reply=await callOllama(txt);}catch{}}
+  if(!reply){const arr=getLocalR(txt);reply=arr[Math.floor(Math.random()*arr.length)];}
+  const am=document.createElement('div');am.className='ma';
+  am.innerHTML=`<div class="al">✦ DAISY AI</div>${reply}`;
+  msgs.appendChild(am);msgs.scrollTop=msgs.scrollHeight;
+  lbl.textContent='DAISY SPEAKING...';
+  daisySpeak(reply,()=>{
+    orb.classList.remove('orb-speaking');
+    if(voiceActive)startListening(orb,lbl);
+  });
+}
+
+function stopAll(orb,lbl){
+  voiceActive=false;
+  if(recognition)recognition.stop();
+  if(synth)synth.cancel();
+  orb.classList.remove('orb-listening','orb-speaking');
+  lbl.textContent='TAP TO TALK\nTO DAISY';
+}
+
+// Load voices when ready
+if(synth&&synth.onvoiceschanged!==undefined){synth.onvoiceschanged=()=>synth.getVoices();}
+
+// ══ ADMIN TEXT EDITOR ══
+const SECTIONS={
+  's02':'Background & Philosophy',
+  's03':'Mission Singularity',
+  's04':'Research & Development',
+  's05':'Daisy Ecosystem',
+  's06':'Active & WIP',
+  's07':'Daisy AI',
+  's08':'NFT Marketplace',
+  's09':'Hardware & Kickstarters',
+  's10':'MasterShell',
+  's11':'RPM Oracle',
+  's12':'Kickstarter Legacy',
+  's13':'Signal',
+  's14':'Contact'
+};
+let isAdmin=false;
+
+function enableAdminEditing(){
+  isAdmin=true;
+  // Add edit buttons to each section heading
+  document.querySelectorAll('.sec .sh').forEach(el=>{
+    const sec=el.closest('.sec');
+    if(!sec||!sec.id)return;
+    if(el.querySelector('.edit-sec-btn'))return;
+    const btn=document.createElement('button');
+    btn.className='edit-sec-btn';
+    btn.textContent='✏️';
+    btn.style.cssText='margin-left:12px;background:none;border:1px solid rgba(0,245,192,.3);color:var(--c);font-size:.7rem;padding:2px 8px;cursor:pointer;vertical-align:middle;transition:all .2s;';
+    btn.onclick=(e)=>{e.stopPropagation();openEditor(sec.id);};
+    el.appendChild(btn);
+  });
+  // Load saved text
+  loadSavedText();
+}
+
+function loadSavedText(){
+  Object.keys(SECTIONS).forEach(id=>{
+    const saved=localStorage.getItem('edit_'+id);
+    if(!saved)return;
+    try{
+      const data=JSON.parse(saved);
+      const sec=document.getElementById(id);
+      if(!sec)return;
+      if(data.heading){const h=sec.querySelector('.sh');if(h){h.innerHTML=data.heading+(h.querySelector('.edit-sec-btn')?h.querySelector('.edit-sec-btn').outerHTML:'');}}
+      if(data.body){const p=sec.querySelector('.sp');if(p)p.innerHTML=data.body;}
+    }catch{}
+  });
+}
+
+function openEditor(secId){
+  const overlay=document.getElementById('editOverlay');
+  const saved=localStorage.getItem('edit_'+secId);
+  const sec=document.getElementById(secId);
+  let heading='',body='';
+  if(saved){try{const d=JSON.parse(saved);heading=d.heading||'';body=d.body||'';}catch{}}
+  if(!heading&&sec){const h=sec.querySelector('.sh');if(h)heading=h.textContent.replace('✏️','').trim();}
+  if(!body&&sec){const p=sec.querySelector('.sp');if(p)body=p.textContent.trim();}
+  document.getElementById('editKey').value=secId;
+  document.getElementById('editHeading').value=heading;
+  document.getElementById('editBody').value=body;
+  // Build section list
+  const list=document.getElementById('sectionList');
+  list.innerHTML='';
+  Object.entries(SECTIONS).forEach(([id,name])=>{
+    const btn=document.createEl
